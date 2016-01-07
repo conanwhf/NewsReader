@@ -8,12 +8,14 @@
 
 import UIKit
 
+private var offset = CGPoint(x: 0,y: 0)
+private let  queue_getListInfo = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);//dispatch_queue_create("GetListInfo",DISPATCH_QUEUE_SERIAL)
+private let  queue_getListImg = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0);
+
 class ListViewController: UIViewController {
     @IBOutlet var ListTableView: UITableView!
     @IBOutlet weak var loading: UIActivityIndicatorView!
-    private var seletedId = 0
-    private let  queue_getListInfo = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);//dispatch_queue_create("GetListInfo",DISPATCH_QUEUE_SERIAL)
-    private let  queue_getListImg = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0);
+    private var selectPost = 0
     private let sliding = UIRefreshControl()
     
     override func viewDidLoad() {
@@ -21,20 +23,24 @@ class ListViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         
         //TODO:
+        
         //manager.wxcCh = WxcChannels.ent
         //manager.wxcGetItemNum = 10
         if manager.wxcList.isEmpty {
             self.updateLatesList()
         }
+        else {
+            //显示之前位置
+            log("selectPost = \(selectPost), offset=\(offset) ")
+            ListTableView.setContentOffset(offset, animated: false)
+            self.updateImg(-1)
+        }
         //添加下拉刷新
         sliding.addTarget(self, action: "updateLatesList", forControlEvents: UIControlEvents.ValueChanged)
-        sliding.attributedTitle = NSAttributedString(string: "松手刷新...")
+        sliding.attributedTitle = NSAttributedString(string: "下拉刷新...")
         self.ListTableView.addSubview(sliding)
         //添加上拉更多
-        //self.ListTableView.addSubview(loading)
-        //self.view.addSubview(loading)
         loading.hidesWhenStopped = true
-        
     }
     
     override func didReceiveMemoryWarning() {
@@ -54,14 +60,12 @@ class ListViewController: UIViewController {
     //Show Cells
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         //log("cellForRowAtIndexPath, index=\(indexPath.row)", self)
-        
         let cell = tableView.dequeueReusableCellWithIdentifier("WxcList", forIndexPath: indexPath) as UITableViewCell
         // Configure the cell...
         cell.textLabel!.text = manager.wxcList[indexPath.row].title
         cell.imageView!.image = UIImage(data: manager.wxcList[indexPath.row].logodata!)
         cell.detailTextLabel!.text = manager.wxcList[indexPath.row].time + "     \(manager.wxcList[indexPath.row].count)"
         cell.detailTextLabel!.textColor = UIColor.grayColor()
-
         return cell
     }
     
@@ -74,7 +78,7 @@ class ListViewController: UIViewController {
 
     func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath?    {
         log("will selet, get title =\(manager.wxcList[indexPath.row].title)", self)
-        seletedId = manager.wxcList[indexPath.row].postId
+        selectPost = indexPath.row
         return indexPath
     }
     
@@ -82,7 +86,8 @@ class ListViewController: UIViewController {
         log("id = \(segue.identifier), \(sender.debugDescription)",self)
         // Get the new view controller using segue.destinationViewController, and pass the selected object to the new view controller.
         let next = segue.destinationViewController as! PostViewController
-        next.postid = seletedId
+        next.postid = manager.wxcList[selectPost].postId
+        offset = self.ListTableView.contentOffset
     }
     
     private func reload(){
@@ -90,19 +95,33 @@ class ListViewController: UIViewController {
             self.ListTableView.reloadData()}
     }
     
-    func updateLatesList(){
-        dispatch_async(queue_getListInfo){
-            log("add a new job to update list info",self)
-            manager.updateData(NewsType.wenxuecity, mode: DataRequestMode.latestItems)
-            self.reload()
-            self.sliding.endRefreshing()
-            dispatch_async(self.queue_getListImg){
+    private func updateImg(index: Int){
+        if index == -1 {
+            dispatch_async(queue_getListImg){
                 log("add a new job to update images",self)
                 manager.wxcList.forEach({
                     $0.updateLogo()
                     self.reload()
                 })
             }
+        }
+        else {
+            dispatch_async(queue_getListInfo){
+                log("update img for index \(index)",self)
+                manager.wxcList[index].updateLogo()
+                self.reload()
+            }
+        }
+    }
+    
+    
+    func updateLatesList(){
+        dispatch_async(queue_getListInfo){
+            log("add a new job to update list info",self)
+            manager.updateData(NewsType.wenxuecity, mode: DataRequestMode.latestItems)
+            self.reload()
+            self.sliding.endRefreshing()
+            self.updateImg(-1)
         }//async end
     }
 
@@ -117,13 +136,7 @@ class ListViewController: UIViewController {
                 manager.updateData(NewsType.wenxuecity, mode: DataRequestMode.moreItems)
                 self.reload()
                 self.loading.stopAnimating()
-                dispatch_async(self.queue_getListImg){
-                    log("add a new job to update images, count=\(manager.wxcList.count)",self)
-                    manager.wxcList.forEach({
-                        $0.updateLogo()
-                        self.reload()
-                    })
-                } //aysnc  img end
+                self.updateImg(-1)
             }
         }
         /*

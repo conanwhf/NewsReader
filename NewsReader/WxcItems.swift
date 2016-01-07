@@ -92,12 +92,14 @@ class WxcListItem : WxcItems {
     
     func updateLogo() {
         if imgdata == nil {
-            imgdata = images.isEmpty ? default_logo : NSData(contentsOfURL: NSURL(string: images[0])!)
-            
+            log("img for \(self.postId), url=" + (self.images.isEmpty ? "nil" : "\(self.images[0])"))
+            self.imgdata = self.images.isEmpty ? default_logo :NSData(contentsOfURL: NSURL(string: self.images[0])!)
+            /*
             let before = UIImage(data: imgdata!)
             let after = reSizeImage(before!, toSize: CGSize(width: 150,height: 150))
             log("before: \(imgdata?.length), after:  \(UIImagePNGRepresentation(after)?.length))",self)
-             //imgdata = UIImagePNGRepresentation(after)
+             imgdata = UIImagePNGRepresentation(after)
+            */
         }
     }
     
