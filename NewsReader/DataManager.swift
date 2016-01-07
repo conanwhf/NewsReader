@@ -40,7 +40,7 @@ enum DataRequestMode{
 
 class NewsDataManager {    
     private var url :NSURL
-    private var wxc = ( api : WxcAPI, list:  Array<WxcListItem>,  post: WxcPostItem?,  channel: WxcChannels) (WxcAPI(), list: [], post: nil, .news)
+    private var wxc = ( api : WxcAPI, list:  Array<Array<WxcListItem>>,  post: WxcPostItem?,  channel: WxcChannels) (WxcAPI(), list: [[],[],[],[],[]], post: nil, .news)
     
     private init (){
         url = NSURL(string:"")!
@@ -50,7 +50,7 @@ class NewsDataManager {
     func updateData(news: NewsType, mode: DataRequestMode, id: Int = 0) {
         switch (news, mode) {
         case (.wenxuecity, .latestItems) :            url = wxc.api.getURL(requestChannel: wxc.channel, last: id)
-        case (.wenxuecity, .moreItems) :            url = wxc.api.getURL(requestChannel: wxc.channel, last: wxc.list.last!.postId)
+        case (.wenxuecity, .moreItems) :            url = wxc.api.getURL(requestChannel: wxc.channel, last: wxc.list[wxc.channel.rawValue].last!.postId)
         case (.wenxuecity, .post) :                      url = wxc.api.getURL(postId: id, requestChannel: wxc.channel)
         default: break
         }
@@ -75,7 +75,7 @@ class NewsDataManager {
             more?.forEach({
                 let temp = WxcListItem(fromdict: ($0 as! ([ String: AnyObject]) ))
                 if temp != nil {
-                    inserItemToList(temp!, arr: &wxc.list)
+                    inserItemToList(temp!, arr: &wxc.list[wxc.channel.rawValue])
                 }
             })
             
@@ -116,7 +116,7 @@ class NewsDataManager {
     /// 计算属性，用来获取属性，实现只读封装
     var wxcList : Array<WxcListItem> {
         get {
-            return wxc.list
+            return wxc.list[wxc.channel.rawValue]
         }
     }
     var wxcPost : WxcPostItem? {

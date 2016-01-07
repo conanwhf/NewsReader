@@ -8,12 +8,13 @@
 
 import UIKit
 
-private var offset = CGPoint(x: 0,y: 0)
+private var last:(CGPoint, Int) = (offset: CGPoint(x: 0,y: 0), ch: 0 )
 private let  queue_getListInfo = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);//dispatch_queue_create("GetListInfo",DISPATCH_QUEUE_SERIAL)
 private let  queue_getListImg = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0);
 private var read : Set<Int> = []
 
 class ListViewController: UIViewController {
+    @IBOutlet weak var channel: UISegmentedControl!
     @IBOutlet var ListTableView: UITableView!
     @IBOutlet weak var loading: UIActivityIndicatorView!
     private var selectPost = 0
@@ -21,19 +22,16 @@ class ListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         // Do any additional setup after loading the view, typically from a nib.
-        
-        //TODO:
-        
-        //manager.wxcCh = WxcChannels.ent
-        //manager.wxcGetItemNum = 10
         if manager.wxcList.isEmpty {
             self.updateLatesList()
         }
         else {
             //显示之前位置
-            log("selectPost = \(selectPost), offset=\(offset) ")
-            ListTableView.setContentOffset(offset, animated: false)
+            log("channel=\(last.1), offset=\(last.0) ")
+            ListTableView.setContentOffset(last.0, animated: false)
+            channel.selectedSegmentIndex = last.1
             self.updateImg(-1)
         }
         //添加下拉刷新
@@ -95,7 +93,8 @@ class ListViewController: UIViewController {
         // Get the new view controller using segue.destinationViewController, and pass the selected object to the new view controller.
         let next = segue.destinationViewController as! PostViewController
         next.postid = manager.wxcList[selectPost].postId
-        offset = self.ListTableView.contentOffset
+        last.0 = self.ListTableView.contentOffset
+        last.1 = self.channel.selectedSegmentIndex
         read = read.union([next.postid])
     }
     
@@ -169,5 +168,21 @@ class ListViewController: UIViewController {
         }
 */
     }//End scrollViewDidEndDragging
+    
+    
+    @IBAction func channelChanged(sender: AnyObject)  {
+        let segment = sender as! UISegmentedControl
+
+        switch (segment.selectedSegmentIndex){
+            case 0: manager.wxcCh = WxcChannels.news
+            case 1: manager.wxcCh = WxcChannels.ent
+            case 2: manager.wxcCh = WxcChannels.social
+            case 3: manager.wxcCh = WxcChannels.blog
+            default: break
+        }
+        self.ListTableView.reloadData()
+        log("segment.selectedSegmentIndex=\(segment.selectedSegmentIndex)")
+        self.updateLatesList()
+    }
     
   }// End All for ListViewController

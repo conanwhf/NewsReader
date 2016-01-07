@@ -26,6 +26,9 @@
                                     <segment title="社会"/>
                                     <segment title="博客"/>
                                 </segments>
+                                <connections>
+                                    <action selector="channelChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="NWZ-ca-8mQ"/>
+                                </connections>
                             </segmentedControl>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="60" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="En1-Gs-s04">
                                 <rect key="frame" x="10" y="58" width="580" height="492"/>
@@ -117,6 +120,7 @@
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="ListTableView" destination="En1-Gs-s04" id="9QL-o1-aYn"/>
+                        <outlet property="channel" destination="Net-m3-PdX" id="y5A-zc-78j"/>
                         <outlet property="loading" destination="O9z-Km-h1I" id="Wsv-1t-Mkp"/>
                     </connections>
                 </viewController>
@@ -155,7 +159,7 @@
                                     <navigationItem title="频道" id="4IU-KT-Tqi">
                                         <barButtonItem key="leftBarButtonItem" style="plain" id="GOO-SN-Dcw">
                                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="AFG-Ln-g9y">
-                                                <rect key="frame" x="20" y="7" width="30" height="30"/>
+                                                <rect key="frame" x="20" y="7" width="45" height="30"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 <state key="normal" title="返回">
@@ -168,7 +172,7 @@
                                         </barButtonItem>
                                         <barButtonItem key="rightBarButtonItem" style="done" id="CDe-aN-Ltv">
                                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="nuj-pL-EwT">
-                                                <rect key="frame" x="550" y="7" width="30" height="30"/>
+                                                <rect key="frame" x="535" y="7" width="45" height="30"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 <state key="normal" title="分享">

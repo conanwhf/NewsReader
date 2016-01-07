@@ -8,18 +8,19 @@
 
 import Foundation
 
-enum WxcChannels : String {
-    case news = "&channel=news"
-    case bbs = "&func=bbs"
-    case blog = "&func=blog"
-    case social = "&channel=gossip"
-    case ent = "&channel=ent"
+enum WxcChannels : Int {
+    case news = 0
+    case ent = 1
+    case social = 2
+    case blog = 3
+    case bbs = 4
 }
 
 struct WxcAPI  {
     private let _APIURL_BASE      = "http://api.wenxuecity.com/service/api/?"
     private let _CALLBACK_ID      = "CONANTEST"
     private let _FORMAT_             =  "json"
+    private let _CHANNELS           = ["&channel=news", "&channel=ent", "&channel=gossip", "&func=blog", "&func=bbs"]
     var pagesize = 30
     /*  - act: {
             view. ( - id)
@@ -40,7 +41,7 @@ struct WxcAPI  {
     func getURL( requestChannel ch : WxcChannels, last: Int = 0 ) -> NSURL {
         //act=list, channel, format, lastid, pagesize
         var st = _APIURL_BASE + "&act=list&version=2" + ("&format=" + _FORMAT_ )
-        st = st + ch.rawValue + "&lastID=\(last)" + "&pagesize=\(pagesize)"
+        st = st + _CHANNELS[ch.rawValue] + "&lastID=\(last)" + "&pagesize=\(pagesize)"
         return NSURL(string: st)!
     }
     
@@ -51,7 +52,7 @@ struct WxcAPI  {
     func getURL(postId id: Int, requestChannel ch : WxcChannels, ver : Int = 2 ) -> NSURL {
         //act=view, format, version
         var st = _APIURL_BASE + "&act=view" + ("&format=" + _FORMAT_ )
-        st = st + "&version=\(ver)" + "&id=\(id)" + ch.rawValue
+        st = st + "&version=\(ver)" + "&id=\(id)" + _CHANNELS[ch.rawValue]
         return NSURL(string: st)!
     }
 

@@ -30,8 +30,7 @@ class PostViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        btnShare.layer.cornerRadius = 10.0
-        //btnBack.buttonType = .DetailDisclosure
+        
         // Do any additional setup after loading the view, typically from a nib.
         log("in controller, id =\(postid)",self)
         
@@ -51,8 +50,8 @@ class PostViewController: UIViewController {
             }
         }
         self.post.editable = false
-        
-        //btnShare.addTarget(self, action: "sharePost", forControlEvents: .TouchUpInside)
+        btnShare.layer.cornerRadius = 10
+        btnBack.layer.cornerRadius = 10
     }
     
     override func didReceiveMemoryWarning() {
@@ -106,5 +105,13 @@ class PostViewController: UIViewController {
             self.presentViewController(share, animated: true, completion: { _ in })
         }
     
+    func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        //log(scrollView.contentOffset, decelerate)
+        if (scrollView.contentOffset.y > (scrollView.contentSize.height - scrollView.frame.size.height) + 70) && (manager.wxcList.count > 0) //70是触发操作的阀值
+        {
+            log(scrollView.contentOffset.y - (scrollView.contentSize.height - scrollView.frame.size.height), "5555555555555")//触发上拉刷新
+            self.performSegueWithIdentifier("BackToList", sender: self)//跳转到下一个页面，使用转场“BackToList”
+        }
+    }
 }
 
