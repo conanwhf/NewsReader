@@ -11,7 +11,7 @@ import UIKit
 class ListViewController: UIViewController {
     @IBOutlet var ListTableView: UITableView!
     @IBOutlet weak var loading: UIActivityIndicatorView!
-    private var seletedId = -1
+    private var seletedId = 0
     private let  queue_getListInfo = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);//dispatch_queue_create("GetListInfo",DISPATCH_QUEUE_SERIAL)
     private let  queue_getListImg = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0);
     private let sliding = UIRefreshControl()
@@ -31,8 +31,10 @@ class ListViewController: UIViewController {
         sliding.attributedTitle = NSAttributedString(string: "松手刷新...")
         self.ListTableView.addSubview(sliding)
         //添加上拉更多
-        self.ListTableView.addSubview(loading)
+        //self.ListTableView.addSubview(loading)
+        //self.view.addSubview(loading)
         loading.hidesWhenStopped = true
+        
     }
     
     override func didReceiveMemoryWarning() {
@@ -77,7 +79,7 @@ class ListViewController: UIViewController {
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        log("id = \(segue.identifier), \(sender.debugDescription)")
+        log("id = \(segue.identifier), \(sender.debugDescription)",self)
         // Get the new view controller using segue.destinationViewController, and pass the selected object to the new view controller.
         let next = segue.destinationViewController as! PostViewController
         next.postid = seletedId
@@ -90,12 +92,12 @@ class ListViewController: UIViewController {
     
     func updateLatesList(){
         dispatch_async(queue_getListInfo){
-            log("add a new job to update list info")
+            log("add a new job to update list info",self)
             manager.updateData(NewsType.wenxuecity, mode: DataRequestMode.latestItems)
             self.reload()
             self.sliding.endRefreshing()
             dispatch_async(self.queue_getListImg){
-                log("add a new job to update images")
+                log("add a new job to update images",self)
                 manager.wxcList.forEach({
                     $0.updateLogo()
                     self.reload()
@@ -106,24 +108,44 @@ class ListViewController: UIViewController {
 
     func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         //log(scrollView.contentOffset, decelerate)
-        if (scrollView.contentOffset.y >= (scrollView.contentSize.height - scrollView.frame.size.height) + 70) && (manager.wxcList.count > 0) //70是触发操作的阀值
+        if (scrollView.contentOffset.y > (scrollView.contentSize.height - scrollView.frame.size.height) + 70) && (manager.wxcList.count > 0) //70是触发操作的阀值
         {
             log(scrollView.contentOffset.y - (scrollView.contentSize.height - scrollView.frame.size.height), "44444444444")//触发上拉刷新
             loading.startAnimating()
             dispatch_async(queue_getListInfo){
+                log("add a new job to get more",self)
                 manager.updateData(NewsType.wenxuecity, mode: DataRequestMode.moreItems)
                 self.reload()
-                log("add a new job to get more")
                 self.loading.stopAnimating()
                 dispatch_async(self.queue_getListImg){
-                    log("add a new job to update images, count=\(manager.wxcList.count)")
+                    log("add a new job to update images, count=\(manager.wxcList.count)",self)
                     manager.wxcList.forEach({
                         $0.updateLogo()
                         self.reload()
                     })
                 } //aysnc  img end
             }
-        }//end refresh do
-    }
-    // End All for ListViewController
-  }
+        }
+        /*
+        log("scrollView.contentOffset.y =\(scrollView.contentOffset.y), scrollView.contentSize.height=\(scrollView.contentSize.height),  scrollView.frame.size.height=\(scrollView.frame.size.height)")
+        if (scrollView.contentOffset.y < -70  && manager.wxcList.count > 0) //触发下拉刷新
+        {
+            loading.startAnimating()
+            dispatch_async(queue_getListInfo){
+                log("add a new job to update list info",self)
+                manager.updateData(NewsType.wenxuecity, mode: DataRequestMode.latestItems)
+                self.reload()
+                self.loading.stopAnimating()
+                dispatch_async(self.queue_getListImg){
+                    log("add a new job to update images",self)
+                    manager.wxcList.forEach({
+                        $0.updateLogo()
+                        self.reload()
+                    })
+                }
+            }//async end
+        }
+*/
+    }//End scrollViewDidEndDragging
+    
+  }// End All for ListViewController

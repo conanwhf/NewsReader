@@ -33,14 +33,14 @@ class PostViewController: UIViewController {
         btnShare.layer.cornerRadius = 10.0
         //btnBack.buttonType = .DetailDisclosure
         // Do any additional setup after loading the view, typically from a nib.
-        log("in controller, id =\(postid)")
+        log("in controller, id =\(postid)",self)
         
         if (self.data == nil) {//first time
             dispatch_async(queue_getPost){
                 manager.updateData(.wenxuecity, mode: .post, id: self.postid)
                 self.data = manager.wxcPost
                 guard self.data != nil else{
-                    log("No post data")
+                    log("No post data",self)
                     return
                 }
                 let temp = self.creatPostText()
@@ -50,8 +50,9 @@ class PostViewController: UIViewController {
                 }
             }
         }
-        
         self.post.editable = false
+        
+        //btnShare.addTarget(self, action: "sharePost", forControlEvents: .TouchUpInside)
     }
     
     override func didReceiveMemoryWarning() {
@@ -65,7 +66,7 @@ class PostViewController: UIViewController {
         var config : String
         var st : String
         
-        log("postwidth = \(post.frame.width), UIsize=\(UIScreen.mainScreen().bounds.size), scale=\(UIScreen.mainScreen().scale)")
+        log("postwidth = \(post.frame.width), UIsize=\(UIScreen.mainScreen().bounds.size), scale=\(UIScreen.mainScreen().scale)",self)
         config = "img{max-width:\(img_width)px !important;}"   //img style
         config.appendContentsOf("body {font-size:\(fontsize)px;}")   //body style
         config.appendContentsOf("h1{font-size: \(fontsize+4)px}")      //title style
@@ -91,10 +92,19 @@ class PostViewController: UIViewController {
         do {
             return (try NSMutableAttributedString(data: st.dataUsingEncoding(NSUnicodeStringEncoding)!, options:htmlopt, documentAttributes: nil))
         }catch {
-            log(error)
+            print(error)
         }
         return NSMutableAttributedString(string: "ERROR")
     }
+    
+    @IBAction func sharePost(sender: AnyObject) {
+            log("share url:\(data?.url)")
+        
+            let shareItems: [AnyObject] = [NSURL(string: data!.url)!]
+            let share = UIActivityViewController(activityItems: shareItems, applicationActivities: nil)
+            //share.excludedActivityTypes = [UIActivityTypePrint, UIActivityTypeCopyToPasteboard, UIActivityTypeAssignToContact, UIActivityTypeSaveToCameraRoll]
+            self.presentViewController(share, animated: true, completion: { _ in })
+        }
     
 }
 

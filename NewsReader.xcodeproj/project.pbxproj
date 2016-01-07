@@ -39,6 +39,19 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		2774C9E11C3E7D81003247B1 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		277FE72B1C242D26004AE026 /* ListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		277FE72D1C2430EF004AE026 /* PostViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
@@ -177,6 +190,7 @@
 				27881B8C1C22668500C6F919 /* Sources */,
 				27881B8D1C22668500C6F919 /* Frameworks */,
 				27881B8E1C22668500C6F919 /* Resources */,
+				2774C9E11C3E7D81003247B1 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);

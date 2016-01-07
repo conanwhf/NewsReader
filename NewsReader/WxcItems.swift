@@ -96,7 +96,7 @@ class WxcListItem : WxcItems {
             
             let before = UIImage(data: imgdata!)
             let after = reSizeImage(before!, toSize: CGSize(width: 150,height: 150))
-            log("before: \(imgdata?.length), after:  \(UIImagePNGRepresentation(after)?.length))","updateLogo")
+            log("before: \(imgdata?.length), after:  \(UIImagePNGRepresentation(after)?.length))",self)
              //imgdata = UIImagePNGRepresentation(after)
         }
     }

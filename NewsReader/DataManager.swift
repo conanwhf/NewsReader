@@ -14,7 +14,7 @@ var manager : NewsDataManager = NewsDataManager()
 func log <T> (message: T , _ marker: AnyObject? = nil )  {
     #if DEBUG
         //print(" \(__FUNCTION__) in \(__FILE__): \(message), from \(self)")
-        print("\(message), [mark: \(marker)]")
+        NSLog("\(message), mark: \(marker)")
     #endif
 }
 func logn (n :Int )  {
@@ -55,7 +55,7 @@ class NewsDataManager {
         default: break
         }
         fillData(news)
-        log(url)
+        log(url, self)
     }
     
     
@@ -65,7 +65,7 @@ class NewsDataManager {
      */
     private func fillData(news: NewsType)  {
         guard let data = NSData(contentsOfURL: url) else {
-            log("No data")
+            log("No data",self)
             return
         }
         do {
@@ -138,7 +138,7 @@ class NewsDataManager {
         }
         set (size) {
             if size > 100 {
-                log("Too many data will be refused")
+                log("Too many data will be refused",self)
             }
             else {
                 wxc.api.pagesize = size
