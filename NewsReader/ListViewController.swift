@@ -11,6 +11,7 @@ import UIKit
 private var offset = CGPoint(x: 0,y: 0)
 private let  queue_getListInfo = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);//dispatch_queue_create("GetListInfo",DISPATCH_QUEUE_SERIAL)
 private let  queue_getListImg = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0);
+private var read : Set<Int> = []
 
 class ListViewController: UIViewController {
     @IBOutlet var ListTableView: UITableView!
@@ -59,10 +60,17 @@ class ListViewController: UIViewController {
     
     //Show Cells
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        //log("cellForRowAtIndexPath, index=\(indexPath.row)", self)
+        //log("cellForRowAtIndexPath, index=\(indexPath.row), post=\(manager.wxcList[indexPath.row].postId), title=\(manager.wxcList[indexPath.row].title)", self)
         let cell = tableView.dequeueReusableCellWithIdentifier("WxcList", forIndexPath: indexPath) as UITableViewCell
         // Configure the cell...
         cell.textLabel!.text = manager.wxcList[indexPath.row].title
+        if read.contains( manager.wxcList[indexPath.row].postId ) {
+            log("read!@    post=\(manager.wxcList[indexPath.row]), set=\(read)")
+            cell.textLabel!.textColor = UIColor.grayColor()
+        }
+        else {
+            cell.textLabel!.textColor = UIColor.blackColor()
+        }
         cell.imageView!.image = UIImage(data: manager.wxcList[indexPath.row].logodata!)
         cell.detailTextLabel!.text = manager.wxcList[indexPath.row].time + "     \(manager.wxcList[indexPath.row].count)"
         cell.detailTextLabel!.textColor = UIColor.grayColor()
@@ -88,6 +96,7 @@ class ListViewController: UIViewController {
         let next = segue.destinationViewController as! PostViewController
         next.postid = manager.wxcList[selectPost].postId
         offset = self.ListTableView.contentOffset
+        read = read.union([next.postid])
     }
     
     private func reload(){
