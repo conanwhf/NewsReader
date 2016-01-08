@@ -125,6 +125,17 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="⏎ 松手返回..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d0O-C1-mdH">
+                                <rect key="frame" x="200" y="536" width="200" height="20"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="5yn-KM-ScS"/>
+                                    <constraint firstAttribute="height" constant="20" id="g4v-be-BYU"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.15255270849814589" green="0.2028623731456547" blue="0.66317626527050599" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yC6-yM-3ov">
                                 <rect key="frame" x="0.0" y="20" width="600" height="44"/>
                                 <items>
@@ -180,7 +191,9 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="tiJ-we-c5C" firstAttribute="top" secondItem="d0O-C1-mdH" secondAttribute="bottom" id="De7-Mu-QDk"/>
                             <constraint firstItem="Xi4-9H-yr2" firstAttribute="leading" secondItem="9wI-ba-K0B" secondAttribute="leadingMargin" constant="-10" id="JR5-88-CVH"/>
+                            <constraint firstItem="d0O-C1-mdH" firstAttribute="centerX" secondItem="9wI-ba-K0B" secondAttribute="centerX" id="QgG-LY-Nnl"/>
                             <constraint firstItem="Xi4-9H-yr2" firstAttribute="top" secondItem="yC6-yM-3ov" secondAttribute="bottom" id="Rxq-06-VMN"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Xi4-9H-yr2" secondAttribute="trailing" constant="-10" id="XPk-HN-JiL"/>
                             <constraint firstItem="yC6-yM-3ov" firstAttribute="trailing" secondItem="9wI-ba-K0B" secondAttribute="trailingMargin" constant="20" id="b9a-BG-nrC"/>
@@ -193,6 +206,7 @@
                         <outlet property="barNav" destination="yC6-yM-3ov" id="4bQ-bx-obk"/>
                         <outlet property="btnBack" destination="AFG-Ln-g9y" id="Nti-LL-wmR"/>
                         <outlet property="btnShare" destination="nuj-pL-EwT" id="ocg-z6-HI1"/>
+                        <outlet property="infoReturn" destination="d0O-C1-mdH" id="UYQ-g5-cCH"/>
                         <outlet property="post" destination="Xi4-9H-yr2" id="LXT-Rp-CZG"/>
                     </connections>
                 </viewController>

@@ -16,18 +16,20 @@
 
 import UIKit
 
+private var DEFAULT_FONT_SIZE = 16
+
 class PostViewController: UIViewController {
     
     @IBOutlet weak var barNav: UINavigationBar!
     @IBOutlet weak var btnShare: UIButton!
     @IBOutlet weak var btnBack: UIButton!
     @IBOutlet weak var post: UITextView!
+    @IBOutlet weak var infoReturn: UILabel!
     
-    private var data : WxcPostItem? = nil
     var postid : Int = 0
-    var fontsize = 16
     private let  queue_getPost = dispatch_queue_create("PostInfo",DISPATCH_QUEUE_SERIAL)
-    private var willReturn = false
+//    private var willReturn = false
+    private var data : WxcPostItem? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,11 +52,13 @@ class PostViewController: UIViewController {
                 }
             }
         }
+
         post.editable = false
+        post.bounces = true
         btnShare.layer.cornerRadius = 10
         btnBack.layer.cornerRadius = 10
-        post.bounces = true
-
+        infoReturn.hidden = true
+        view.bringSubviewToFront(infoReturn)
     }
     
     override func didReceiveMemoryWarning() {
@@ -70,10 +74,10 @@ class PostViewController: UIViewController {
         
         log("postwidth = \(post.frame.width), UIsize=\(UIScreen.mainScreen().bounds.size), scale=\(UIScreen.mainScreen().scale)",self)
         config = "img{max-width:\(img_width)px !important;}"   //img style
-        config.appendContentsOf("body {font-size:\(fontsize)px;}")   //body style
-        config.appendContentsOf("h1{font-size: \(fontsize+4)px}")      //title style
-        config.appendContentsOf("h2{font-size: \(fontsize-2)px; color:grey}")      //info style
-        config.appendContentsOf("com{font-size: \(fontsize-1)px; color:#070F50; font-famliy:Cursive}")      //coment style
+        config.appendContentsOf("body {font-size:\(DEFAULT_FONT_SIZE)px;}")   //body style
+        config.appendContentsOf("h1{font-size: \(DEFAULT_FONT_SIZE+4)px}")      //title style
+        config.appendContentsOf("h2{font-size: \(DEFAULT_FONT_SIZE-2)px; color:grey}")      //info style
+        config.appendContentsOf("com{font-size: \(DEFAULT_FONT_SIZE-1)px; color:#070F50; font-famliy:Cursive}")      //coment style
         config = "<head><style>" + config + "</style></head>"
         
         //Title
@@ -87,7 +91,7 @@ class PostViewController: UIViewController {
         //Comment
         st.appendContentsOf("<com>")
         data!.comment.forEach({
-            st.appendContentsOf("\($0.usr) 发表于 \($0.time)<br/>\($0.content)<br/><br/>")
+            st.appendContentsOf("<b>\($0.usr) 发表于 \($0.time)</b><br/><i>\($0.content)</i><br/><br/>")
         })
         st.appendContentsOf("</com>")
         st = config + st
@@ -108,30 +112,35 @@ class PostViewController: UIViewController {
             self.presentViewController(share, animated: true, completion: { _ in })
         }
 
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        if (scrollView.contentOffset.y > (scrollView.contentSize.height - scrollView.frame.size.height) + (scrollView.frame.size.height / 4) ) && (infoReturn.hidden) // (scrollView.frame.size.height / 4)是触发操作的阀值
+        {
+            log("松手返回")//触发返回
+            infoReturn.hidden = false
+            //self.performSegueWithIdentifier("BackToList", sender: self)//跳转到下一个页面，使用转场“BackToList”
+        }
+        if (scrollView.contentOffset.y < (scrollView.contentSize.height - scrollView.frame.size.height) + (scrollView.frame.size.height / 5) ) && (!infoReturn.hidden){
+            log("取消返回")
+            infoReturn.hidden = true
+        }
+    }// any offset changes
+    
     func scrollViewWillEndDragging(scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>){
 //        log("scrollView.contentOffset=\(scrollView.contentOffset), scrollView.contentSize.height =\(scrollView.contentSize.height ), scrollView.frame.size.height=\(scrollView.frame.size.height), targetContentOffset=\(targetContentOffset), withVelocity=\(velocity)")
-        if (scrollView.contentOffset.y > (scrollView.contentSize.height - scrollView.frame.size.height) + (scrollView.frame.size.height / 4) ) && (manager.wxcList.count > 0) // (scrollView.frame.size.height / 4)是触发操作的阀值
+        if (scrollView.contentOffset.y > (scrollView.contentSize.height - scrollView.frame.size.height) + (scrollView.frame.size.height / 5) ) && (!infoReturn.hidden)
         {
-            log(scrollView.contentOffset.y - (scrollView.contentSize.height - scrollView.frame.size.height), "5555555555555")//触发上拉刷新
-            willReturn = true
-        }
-    }
-    
-    func scrollViewDidEndDecelerating(scrollView: UIScrollView)  {
-        //logn(7)
-        //log("scrollView.contentOffset=\(scrollView.contentOffset), scrollView.contentSize.height =\(scrollView.contentSize.height ), scrollView.frame.size.height=\(scrollView.frame.size.height)")
-        if willReturn && (scrollView.contentOffset.y == scrollView.contentSize.height - scrollView.frame.size.height) {
-            logn(0)
+            log(scrollView.contentOffset.y - (scrollView.contentSize.height - scrollView.frame.size.height),"777777777返回")
             self.performSegueWithIdentifier("BackToList", sender: self)//跳转到下一个页面，使用转场“BackToList”
         }
-    }// called when scroll view grinds to a halt
+    }
 
-    /* callbacks for ScrollView
-    func scrollViewDidScroll(scrollView: UIScrollView) {logn(1)}// any offset changes
+     /*callbacks for ScrollView
+    //func scrollViewDidScroll(scrollView: UIScrollView) {logn(1)}// any offset changes
     func scrollViewWillBeginDragging(scrollView: UIScrollView) {logn(3)}
-    func scrollViewWillEndDragging(scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {logn(4)}
+    //func scrollViewWillEndDragging(scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {logn(4)}
     func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {logn(5)}
     func scrollViewWillBeginDecelerating(scrollView: UIScrollView)  {logn(6)}// called on finger up as we are moving
+    func scrollViewDidEndDecelerating(scrollView: UIScrollView)  {logn(7)}// called when scroll view grinds to a halt
     func scrollViewDidScrollToTop(scrollView: UIScrollView)  {logn(13)}// called when scrolling animation finished. may be called immediately if already at top
     */
 }
