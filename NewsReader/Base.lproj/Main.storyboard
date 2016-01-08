@@ -37,7 +37,7 @@
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 </activityIndicatorView>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="WxcList" id="UQn-F2-2t8" customClass="ListTableViewCell" customModule="NewsReader" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="UQn-F2-2t8" customClass="ListTableViewCell" customModule="NewsReader" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="580" height="75"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="UQn-F2-2t8" id="Az1-CR-yYs">
@@ -48,13 +48,13 @@
                                             <accessibilityTraits key="traits" image="YES"/>
                                         </accessibility>
                                         <connections>
-                                            <segue destination="ZIL-xU-OfT" kind="show" id="fgI-PT-nlp"/>
+                                            <segue destination="ZIL-xU-OfT" kind="show" identifier="ShowPost" id="98k-cZ-Lij"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
                                     <outlet property="dataSource" destination="BYZ-38-t0r" id="35y-3x-tH6"/>
-                                    <outlet property="delegate" destination="BYZ-38-t0r" id="s57-sG-qZx"/>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="QmZ-5Z-bv7"/>
                                 </connections>
                             </tableView>
                             <tabBar contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WGF-zF-VMk">

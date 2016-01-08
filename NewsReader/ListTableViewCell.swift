@@ -8,6 +8,8 @@
 
 import UIKit
 
+let CELL_ID = "NewsList"
+
 private let BASE_FONT_SIZE :CGFloat = 18
 private let V_BLANK = 10
 private let ITEM_OFFSET = 5
@@ -33,31 +35,28 @@ class ListTableViewCell: UITableViewCell {
         return (frameImg, frameTitle, frameInfo)
     }
     
-/*
+
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        logn(1)
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        logn(2)
-        print(aDecoder)
-        fatalError("init(coder:) has not been implemented")
-    }
-*/
-    func showListItemInfo(index: Int){
-//        let labelWitdth = Int(self.frame.width) - IMG_WIDTH - 20
-        let temp = layout()
-
-        // Configure the cell...
-
-        //先删掉旧的
-        self.subviews.filter({$0.tag == 0x119}).forEach{$0.removeFromSuperview()}
+        
+        self.frame.size = CGSize(width: frame.width, height: 75)
+        //log(self.frame,"111111111")
+        let temp = self.layout()
         title = UILabel(frame: temp.1)
         info = UILabel(frame: temp.2)
         img = UIImageView(frame: temp.0)
-        
-        //Title Config
+        self.addSubview(title)
+        self.addSubview(info)
+        self.addSubview(img)
+        //log("title=\(title), info=\(info), img=\(img),self=\(self.debugDescription)")
+    }
+
+    required init(coder aDecoder: NSCoder){
+        super.init(coder: aDecoder)!
+    }
+
+    func showListItemInfo(index: Int){
+       //Title Config
         title.lineBreakMode = .ByClipping
 //            title.font = UIFont.systemFontOfSize(BASE_FONT_SIZE)
         title.numberOfLines = 2
@@ -77,13 +76,6 @@ class ListTableViewCell: UITableViewCell {
         img.contentMode = .ScaleAspectFit
         img.layer.masksToBounds = true
         img.layer.cornerRadius = 8.0
-        
-        title.tag = 0x119
-        info.tag = 0x119
-        img.tag = 0x119
-        self.addSubview(title)
-        self.addSubview(info)
-        self.addSubview(img!)
     }
     
     override func awakeFromNib() {
