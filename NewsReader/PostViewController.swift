@@ -27,13 +27,14 @@ class PostViewController: UIViewController {
     var postid : Int = 0
     var fontsize = 16
     private let  queue_getPost = dispatch_queue_create("PostInfo",DISPATCH_QUEUE_SERIAL)
+    private var willReturn = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view, typically from a nib.
         log("in controller, id =\(postid)",self)
-        
+
         if (self.data == nil) {//first time
             dispatch_async(queue_getPost){
                 manager.updateData(.wenxuecity, mode: .post, id: self.postid)
@@ -49,9 +50,10 @@ class PostViewController: UIViewController {
                 }
             }
         }
-        self.post.editable = false
+        post.editable = false
         btnShare.layer.cornerRadius = 10
         btnBack.layer.cornerRadius = 10
+        post.bounces = true
 
     }
     
@@ -105,14 +107,32 @@ class PostViewController: UIViewController {
             //share.excludedActivityTypes = [UIActivityTypePrint, UIActivityTypeCopyToPasteboard, UIActivityTypeAssignToContact, UIActivityTypeSaveToCameraRoll]
             self.presentViewController(share, animated: true, completion: { _ in })
         }
-    
-    func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        log("scrollView.contentOffset=\(scrollView.contentOffset), scrollView.contentSize.height =\(scrollView.contentSize.height ), scrollView.frame.size.height=\(scrollView.frame.size.height)")
-        if (scrollView.contentOffset.y > (scrollView.contentSize.height - scrollView.frame.size.height) + 70) && (manager.wxcList.count > 0) //70是触发操作的阀值
+
+    func scrollViewWillEndDragging(scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>){
+//        log("scrollView.contentOffset=\(scrollView.contentOffset), scrollView.contentSize.height =\(scrollView.contentSize.height ), scrollView.frame.size.height=\(scrollView.frame.size.height), targetContentOffset=\(targetContentOffset), withVelocity=\(velocity)")
+        if (scrollView.contentOffset.y > (scrollView.contentSize.height - scrollView.frame.size.height) + (scrollView.frame.size.height / 4) ) && (manager.wxcList.count > 0) // (scrollView.frame.size.height / 4)是触发操作的阀值
         {
             log(scrollView.contentOffset.y - (scrollView.contentSize.height - scrollView.frame.size.height), "5555555555555")//触发上拉刷新
-            self.performSegueWithIdentifier("BackToList", sender: self)//跳转到下一个页面，使用转场“BackToList”
+            willReturn = true
         }
     }
+    
+    func scrollViewDidEndDecelerating(scrollView: UIScrollView)  {
+        //logn(7)
+        //log("scrollView.contentOffset=\(scrollView.contentOffset), scrollView.contentSize.height =\(scrollView.contentSize.height ), scrollView.frame.size.height=\(scrollView.frame.size.height)")
+        if willReturn && (scrollView.contentOffset.y == scrollView.contentSize.height - scrollView.frame.size.height) {
+            logn(0)
+            self.performSegueWithIdentifier("BackToList", sender: self)//跳转到下一个页面，使用转场“BackToList”
+        }
+    }// called when scroll view grinds to a halt
+
+    /* callbacks for ScrollView
+    func scrollViewDidScroll(scrollView: UIScrollView) {logn(1)}// any offset changes
+    func scrollViewWillBeginDragging(scrollView: UIScrollView) {logn(3)}
+    func scrollViewWillEndDragging(scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {logn(4)}
+    func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {logn(5)}
+    func scrollViewWillBeginDecelerating(scrollView: UIScrollView)  {logn(6)}// called on finger up as we are moving
+    func scrollViewDidScrollToTop(scrollView: UIScrollView)  {logn(13)}// called when scrolling animation finished. may be called immediately if already at top
+    */
 }
 

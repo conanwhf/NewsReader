@@ -44,6 +44,7 @@ class ListViewController: UIViewController {
         self.ListTableView.addSubview(sliding)
         //添加上拉更多
         loading.hidesWhenStopped = true
+        loading.startAnimating()
     }
     
     override func didReceiveMemoryWarning() {
@@ -104,7 +105,9 @@ class ListViewController: UIViewController {
     
     private func reload(){
         dispatch_async(dispatch_get_main_queue()){
-            self.ListTableView.reloadData()}
+            self.ListTableView.reloadData()
+            self.loading.stopAnimating()
+        }
     }
     
     private func updateImg(index: Int){
@@ -147,7 +150,7 @@ class ListViewController: UIViewController {
                 log("add a new job to get more",self)
                 manager.updateData(last.news, mode: DataRequestMode.moreItems)
                 self.reload()
-                self.loading.stopAnimating()
+                //self.loading.stopAnimating()
                 self.updateImg(-1)
             }
         }

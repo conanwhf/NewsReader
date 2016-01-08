@@ -150,6 +150,9 @@
                                     </fragment>
                                 </attributedString>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                <connections>
+                                    <outlet property="delegate" destination="ZIL-xU-OfT" id="9bJ-Mw-5Ec"/>
+                                </connections>
                             </textView>
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yC6-yM-3ov">
                                 <rect key="frame" x="0.0" y="20" width="600" height="44"/>
@@ -183,6 +186,9 @@
                                         </barButtonItem>
                                     </navigationItem>
                                 </items>
+                                <connections>
+                                    <outlet property="delegate" destination="ZIL-xU-OfT" id="1GL-cS-pMT"/>
+                                </connections>
                             </navigationBar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
