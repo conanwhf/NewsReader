@@ -23,8 +23,6 @@
                                 <segments>
                                     <segment title="新闻"/>
                                     <segment title="娱乐"/>
-                                    <segment title="社会"/>
-                                    <segment title="博客"/>
                                 </segments>
                                 <connections>
                                     <action selector="channelChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="NWZ-ca-8mQ"/>

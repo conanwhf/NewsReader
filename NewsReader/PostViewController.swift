@@ -52,6 +52,7 @@ class PostViewController: UIViewController {
         self.post.editable = false
         btnShare.layer.cornerRadius = 10
         btnBack.layer.cornerRadius = 10
+
     }
     
     override func didReceiveMemoryWarning() {
@@ -106,7 +107,7 @@ class PostViewController: UIViewController {
         }
     
     func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        //log(scrollView.contentOffset, decelerate)
+        log("scrollView.contentOffset=\(scrollView.contentOffset), scrollView.contentSize.height =\(scrollView.contentSize.height ), scrollView.frame.size.height=\(scrollView.frame.size.height)")
         if (scrollView.contentOffset.y > (scrollView.contentSize.height - scrollView.frame.size.height) + 70) && (manager.wxcList.count > 0) //70是触发操作的阀值
         {
             log(scrollView.contentOffset.y - (scrollView.contentSize.height - scrollView.frame.size.height), "5555555555555")//触发上拉刷新

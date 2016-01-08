@@ -15,6 +15,7 @@ enum WxcChannels : Int {
     case blog = 3
     case bbs = 4
 }
+let wxcChannelArr = ["新闻", "娱乐", "社会"]
 
 struct WxcAPI  {
     private let _APIURL_BASE      = "http://api.wenxuecity.com/service/api/?"

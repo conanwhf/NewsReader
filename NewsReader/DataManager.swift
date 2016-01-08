@@ -24,8 +24,8 @@ func logn (n :Int )  {
 }
 
 
-enum NewsType{
-    case wenxuecity
+enum NewsType :Int {
+    case wenxuecity = 3
     case qiushi
     case channel8
     case wuyun

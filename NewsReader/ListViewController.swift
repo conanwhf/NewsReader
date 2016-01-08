@@ -8,7 +8,7 @@
 
 import UIKit
 
-private var last:(CGPoint, Int) = (offset: CGPoint(x: 0,y: 0), ch: 0 )
+private var last = (offset: CGPoint(x: 0,y: 0), ch: 0, news: NewsType.wenxuecity )
 private let  queue_getListInfo = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);//dispatch_queue_create("GetListInfo",DISPATCH_QUEUE_SERIAL)
 private let  queue_getListImg = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0);
 private var read : Set<Int> = []
@@ -24,6 +24,10 @@ class ListViewController: UIViewController {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view, typically from a nib.
+        channel.removeAllSegments()
+        for (i, j) in wxcChannelArr.enumerate() {
+            channel.insertSegmentWithTitle(j, atIndex: i, animated: false)
+        }
         if manager.wxcList.isEmpty {
             self.updateLatesList()
         }
@@ -126,7 +130,7 @@ class ListViewController: UIViewController {
     func updateLatesList(){
         dispatch_async(queue_getListInfo){
             log("add a new job to update list info",self)
-            manager.updateData(NewsType.wenxuecity, mode: DataRequestMode.latestItems)
+            manager.updateData(last.news, mode: DataRequestMode.latestItems)
             self.reload()
             self.sliding.endRefreshing()
             self.updateImg(-1)
@@ -141,7 +145,7 @@ class ListViewController: UIViewController {
             loading.startAnimating()
             dispatch_async(queue_getListInfo){
                 log("add a new job to get more",self)
-                manager.updateData(NewsType.wenxuecity, mode: DataRequestMode.moreItems)
+                manager.updateData(last.news, mode: DataRequestMode.moreItems)
                 self.reload()
                 self.loading.stopAnimating()
                 self.updateImg(-1)
@@ -154,7 +158,7 @@ class ListViewController: UIViewController {
             loading.startAnimating()
             dispatch_async(queue_getListInfo){
                 log("add a new job to update list info",self)
-                manager.updateData(NewsType.wenxuecity, mode: DataRequestMode.latestItems)
+                manager.updateData(last.news, mode: DataRequestMode.latestItems)
                 self.reload()
                 self.loading.stopAnimating()
                 dispatch_async(self.queue_getListImg){
