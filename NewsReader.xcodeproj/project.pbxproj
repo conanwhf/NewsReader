@@ -20,6 +20,7 @@
 		27881BC81C22963400C6F919 /* WxcItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27881BC71C22963400C6F919 /* WxcItems.swift */; };
 		27881BCA1C2296AC00C6F919 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27881BC91C2296AC00C6F919 /* DataManager.swift */; };
 		27C4A55D1C2BE78400FE6005 /* 1stPage.png in Resources */ = {isa = PBXBuildFile; fileRef = 27C4A55C1C2BE78400FE6005 /* 1stPage.png */; };
+		27FAECC21C3FADC7003D08DF /* ListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FAECC11C3FADC7003D08DF /* ListTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,6 +73,7 @@
 		27881BC71C22963400C6F919 /* WxcItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WxcItems.swift; sourceTree = "<group>"; };
 		27881BC91C2296AC00C6F919 /* DataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		27C4A55C1C2BE78400FE6005 /* 1stPage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 1stPage.png; sourceTree = "<group>"; };
+		27FAECC11C3FADC7003D08DF /* ListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,6 +120,7 @@
 				27881B931C22668500C6F919 /* AppDelegate.swift */,
 				277FE72D1C2430EF004AE026 /* PostViewController.swift */,
 				277FE72B1C242D26004AE026 /* ListViewController.swift */,
+				27FAECC11C3FADC7003D08DF /* ListTableViewCell.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -317,6 +320,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				277FE72E1C2430EF004AE026 /* PostViewController.swift in Sources */,
+				27FAECC21C3FADC7003D08DF /* ListTableViewCell.swift in Sources */,
 				27881B9C1C22668500C6F919 /* NewsReader.xcdatamodeld in Sources */,
 				27881BCA1C2296AC00C6F919 /* DataManager.swift in Sources */,
 				27881BC81C22963400C6F919 /* WxcItems.swift in Sources */,

@@ -28,14 +28,14 @@ class ListViewController: UIViewController {
         for (i, j) in wxcChannelArr.enumerate() {
             channel.insertSegmentWithTitle(j, atIndex: i, animated: false)
         }
+        channel.selectedSegmentIndex = last.ch
         if manager.wxcList.isEmpty {
             self.updateLatesList()
         }
         else {
             //显示之前位置
-            log("channel=\(last.1), offset=\(last.0) ")
-            ListTableView.setContentOffset(last.0, animated: false)
-            channel.selectedSegmentIndex = last.1
+            log("channel=\(last.ch), offset=\(last.offset) ")
+            ListTableView.setContentOffset(last.offset, animated: false)
             self.updateImg(-1)
         }
         //添加下拉刷新
@@ -63,8 +63,10 @@ class ListViewController: UIViewController {
     
     //Show Cells
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        //log("cellForRowAtIndexPath, index=\(indexPath.row), post=\(manager.wxcList[indexPath.row].postId), title=\(manager.wxcList[indexPath.row].title)", self)
-        let cell = tableView.dequeueReusableCellWithIdentifier("WxcList", forIndexPath: indexPath) as UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("WxcList", forIndexPath: indexPath) as? ListTableViewCell
+        log("cellForRowAtIndexPath, index=\(indexPath.row), post=\(manager.wxcList[indexPath.row].postId), title=\(manager.wxcList[indexPath.row].title)", cell)
+/*
+         let cell = tableView.dequeueReusableCellWithIdentifier("WxcList", forIndexPath: indexPath) as UITableViewCell
         // Configure the cell...
         cell.textLabel!.text = manager.wxcList[indexPath.row].title
         if read.contains( manager.wxcList[indexPath.row].postId ) {
@@ -74,19 +76,40 @@ class ListViewController: UIViewController {
         else {
             cell.textLabel!.textColor = UIColor.blackColor()
         }
+        
+        let img = UIImageView(frame: CGRect(x: 15, y: 0, width: 85, height: 59))
+        
         cell.imageView!.image = UIImage(data: manager.wxcList[indexPath.row].logodata!)
+        //缩放：新旧的长宽分别为newW, newH, oldW, oldH
+        //let sx = CGFloat(50 / cell.imageView!.frame.width)
+        //let sy = CGFloat(40 / cell.imageView!.frame.height)
+        //cell.imageView!.transform = CGAffineTransformMakeScale(sx, sy)
+        log("frame=\( cell.imageView!.frame)")
+        cell.imageView!.contentMode = .ScaleAspectFit
+        cell.imageView!.frame.size = CGSize(width: 50, height: 50)
+        cell.imageView!.layer.cornerRadius = 10.0
         cell.detailTextLabel!.text = manager.wxcList[indexPath.row].time + "     \(manager.wxcList[indexPath.row].count)"
         cell.detailTextLabel!.textColor = UIColor.grayColor()
-        return cell
+  */
+        cell?.showListItemInfo(indexPath.row)
+        if read.contains( manager.wxcList[indexPath.row].postId ) {
+            log("read!@    post=\(manager.wxcList[indexPath.row]), set=\(read)")
+            cell?.title.textColor = UIColor.grayColor()
+        }
+        else {
+            cell?.title.textColor = UIColor.blackColor()
+        }
+
+        return cell!
     }
     
-    //Selete and deselect
+    /*Selete and deselect
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
         log("seleted, get title =\(manager.wxcList[indexPath.row].title)", self)
         //self.performSegueWithIdentifier("ShowPost", sender: self)//跳转到下一个页面，识别“ShowPost”
     }
-
+*/
     func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath?    {
         log("will selet, get title =\(manager.wxcList[indexPath.row].title)", self)
         selectPost = indexPath.row
@@ -98,8 +121,8 @@ class ListViewController: UIViewController {
         // Get the new view controller using segue.destinationViewController, and pass the selected object to the new view controller.
         let next = segue.destinationViewController as! PostViewController
         next.postid = manager.wxcList[selectPost].postId
-        last.0 = self.ListTableView.contentOffset
-        last.1 = self.channel.selectedSegmentIndex
+        last.offset = self.ListTableView.contentOffset
+        last.ch = self.channel.selectedSegmentIndex
         read = read.union([next.postid])
     }
     
