@@ -15,6 +15,7 @@
 //
 
 import UIKit
+import iAd
 
 private var DEFAULT_FONT_SIZE = 16
 
@@ -25,6 +26,7 @@ class PostViewController: UIViewController {
     @IBOutlet weak var btnBack: UIButton!
     @IBOutlet weak var post: UITextView!
     @IBOutlet weak var infoReturn: UILabel!
+    @IBOutlet weak var postAd: ADBannerView!
     
     var postid : Int = 0
     private let  queue_getPost = dispatch_queue_create("PostInfo",DISPATCH_QUEUE_SERIAL)
@@ -36,7 +38,8 @@ class PostViewController: UIViewController {
         
         // Do any additional setup after loading the view, typically from a nib.
         log("in controller, id =\(postid)",self)
-
+        
+        self.canDisplayBannerAds = true
         if (self.data == nil) {//first time
             dispatch_async(queue_getPost){
                 manager.updateData(.wenxuecity, mode: .post, id: self.postid)
@@ -129,7 +132,7 @@ class PostViewController: UIViewController {
 //        log("scrollView.contentOffset=\(scrollView.contentOffset), scrollView.contentSize.height =\(scrollView.contentSize.height ), scrollView.frame.size.height=\(scrollView.frame.size.height), targetContentOffset=\(targetContentOffset), withVelocity=\(velocity)")
         if (scrollView.contentOffset.y > (scrollView.contentSize.height - scrollView.frame.size.height) + (scrollView.frame.size.height / 5) ) && (!infoReturn.hidden)
         {
-            log(scrollView.contentOffset.y - (scrollView.contentSize.height - scrollView.frame.size.height),"777777777返回")
+            log(scrollView.contentOffset.y - (scrollView.contentSize.height - scrollView.frame.size.height),"Post返回")
             self.performSegueWithIdentifier("BackToList", sender: self)//跳转到下一个页面，使用转场“BackToList”
         }
     }

@@ -29,10 +29,10 @@
                                 </connections>
                             </segmentedControl>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="75" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="En1-Gs-s04">
-                                <rect key="frame" x="10" y="58" width="580" height="492"/>
+                                <rect key="frame" x="10" y="58" width="580" height="476"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <gestureRecognizers/>
-                                <activityIndicatorView key="tableFooterView" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" id="O9z-Km-h1I">
+                                <activityIndicatorView key="tableFooterView" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" id="BDI-9B-wpA">
                                     <rect key="frame" x="0.0" y="103" width="580" height="20"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 </activityIndicatorView>
@@ -53,65 +53,52 @@
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
-                                    <outlet property="dataSource" destination="BYZ-38-t0r" id="35y-3x-tH6"/>
-                                    <outlet property="delegate" destination="BYZ-38-t0r" id="QmZ-5Z-bv7"/>
+                                    <outlet property="dataSource" destination="BYZ-38-t0r" id="Ooo-NU-0yh"/>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="rHq-Nr-Zfz"/>
                                 </connections>
                             </tableView>
-                            <tabBar contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WGF-zF-VMk">
-                                <rect key="frame" x="0.0" y="550" width="600" height="50"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" priority="750" constant="50" id="sbp-OU-mwW"/>
-                                    <constraint firstAttribute="width" id="wBM-QR-hjE"/>
-                                </constraints>
-                                <items>
-                                    <tabBarItem systemItem="favorites" id="h0i-0q-ZOT"/>
-                                    <tabBarItem title="Item" id="I9a-pp-zEo"/>
-                                    <tabBarItem title="Item" id="iNF-1a-5gi"/>
-                                    <tabBarItem systemItem="more" id="9bZ-gT-mew"/>
-                                </items>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="wBM-QR-hjE"/>
-                                    </mask>
-                                </variation>
-                            </tabBar>
+                            <adBannerView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="f0p-yq-UoV">
+                                <rect key="frame" x="20" y="534" width="560" height="66"/>
+                                <connections>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="Pfv-2i-lj2"/>
+                                </connections>
+                            </adBannerView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
                         <constraints>
-                            <constraint firstItem="WGF-zF-VMk" firstAttribute="top" secondItem="En1-Gs-s04" secondAttribute="bottom" id="7fl-na-Crq"/>
-                            <constraint firstItem="WGF-zF-VMk" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="A7T-8a-oQN"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="f0p-yq-UoV" secondAttribute="bottom" id="6fh-b8-HHT"/>
                             <constraint firstItem="En1-Gs-s04" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-10" id="AvX-cU-2pW"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="WGF-zF-VMk" secondAttribute="trailing" constant="-20" id="IvR-MW-6bX"/>
+                            <constraint firstItem="f0p-yq-UoV" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="Ibd-90-ITJ"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="f0p-yq-UoV" secondAttribute="trailing" id="L2u-2I-8KX"/>
                             <constraint firstItem="En1-Gs-s04" firstAttribute="top" secondItem="Net-m3-PdX" secondAttribute="bottom" constant="10" id="UDc-nb-eko"/>
                             <constraint firstAttribute="trailingMargin" secondItem="En1-Gs-s04" secondAttribute="trailing" constant="-10" id="YRg-oX-jEa"/>
                             <constraint firstItem="Net-m3-PdX" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="50" id="amV-Cf-uQf"/>
-                            <constraint firstAttribute="bottomMargin" secondItem="WGF-zF-VMk" secondAttribute="bottom" id="bJi-l8-yKv"/>
-                            <constraint firstItem="WGF-zF-VMk" firstAttribute="top" secondItem="En1-Gs-s04" secondAttribute="bottom" id="ljY-w1-1MR"/>
+                            <constraint firstItem="f0p-yq-UoV" firstAttribute="top" secondItem="En1-Gs-s04" secondAttribute="bottom" id="h3k-Yi-WlX"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="En1-Gs-s04" secondAttribute="bottom" constant="66" id="qdG-6W-qCH"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Net-m3-PdX" secondAttribute="trailing" constant="50" id="rUy-vT-JbG"/>
-                            <constraint firstItem="WGF-zF-VMk" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="topMargin" constant="550" id="udx-Hu-PcN"/>
                             <constraint firstItem="En1-Gs-s04" firstAttribute="top" secondItem="Net-m3-PdX" secondAttribute="bottom" constant="10" id="wMd-Gb-kFj"/>
                             <constraint firstItem="Net-m3-PdX" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="xbF-AK-cGP"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
-                                <exclude reference="ljY-w1-1MR"/>
-                                <exclude reference="udx-Hu-PcN"/>
+                                <exclude reference="qdG-6W-qCH"/>
+                                <exclude reference="wMd-Gb-kFj"/>
                             </mask>
                         </variation>
                     </view>
                     <toolbarItems/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
-                        <outlet property="ListTableView" destination="En1-Gs-s04" id="9QL-o1-aYn"/>
+                        <outlet property="ListTableView" destination="En1-Gs-s04" id="Uoy-eK-cYI"/>
                         <outlet property="channel" destination="Net-m3-PdX" id="y5A-zc-78j"/>
-                        <outlet property="loading" destination="O9z-Km-h1I" id="Wsv-1t-Mkp"/>
+                        <outlet property="listAd" destination="f0p-yq-UoV" id="jQt-ZT-7TK"/>
+                        <outlet property="loading" destination="BDI-9B-wpA" id="pK3-tr-Bxw"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-505" y="233"/>
+            <point key="canvasLocation" x="-493" y="197"/>
         </scene>
         <!--Post View Controller-->
         <scene sceneID="kFL-6I-sIy">
@@ -125,17 +112,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="⏎ 松手返回..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d0O-C1-mdH">
-                                <rect key="frame" x="200" y="536" width="200" height="20"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="200" id="5yn-KM-ScS"/>
-                                    <constraint firstAttribute="height" constant="20" id="g4v-be-BYU"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="0.15255270849814589" green="0.2028623731456547" blue="0.66317626527050599" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yC6-yM-3ov">
                                 <rect key="frame" x="0.0" y="20" width="600" height="44"/>
                                 <items>
@@ -172,8 +148,19 @@
                                     <outlet property="delegate" destination="ZIL-xU-OfT" id="1GL-cS-pMT"/>
                                 </connections>
                             </navigationBar>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="⏎ 松手返回..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d0O-C1-mdH">
+                                <rect key="frame" x="200" y="514" width="200" height="20"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="5yn-KM-ScS"/>
+                                    <constraint firstAttribute="height" constant="20" id="g4v-be-BYU"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.15255270849814589" green="0.2028623731456547" blue="0.66317626527050599" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xi4-9H-yr2">
-                                <rect key="frame" x="10" y="64" width="580" height="536"/>
+                                <rect key="frame" x="10" y="64" width="580" height="470"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <attributedString key="attributedText">
                                     <fragment content="Loading....">
@@ -188,19 +175,35 @@
                                     <outlet property="delegate" destination="ZIL-xU-OfT" id="9bJ-Mw-5Ec"/>
                                 </connections>
                             </textView>
+                            <adBannerView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="O9W-h7-Mly">
+                                <rect key="frame" x="20" y="534" width="560" height="66"/>
+                            </adBannerView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstAttribute="trailingMargin" secondItem="O9W-h7-Mly" secondAttribute="trailing" id="D7V-Wc-rTe"/>
                             <constraint firstItem="tiJ-we-c5C" firstAttribute="top" secondItem="d0O-C1-mdH" secondAttribute="bottom" id="De7-Mu-QDk"/>
+                            <constraint firstItem="O9W-h7-Mly" firstAttribute="top" secondItem="Xi4-9H-yr2" secondAttribute="bottom" id="EGz-Ez-6go"/>
                             <constraint firstItem="Xi4-9H-yr2" firstAttribute="leading" secondItem="9wI-ba-K0B" secondAttribute="leadingMargin" constant="-10" id="JR5-88-CVH"/>
+                            <constraint firstItem="O9W-h7-Mly" firstAttribute="top" secondItem="d0O-C1-mdH" secondAttribute="bottom" id="N1h-Op-8rN"/>
                             <constraint firstItem="d0O-C1-mdH" firstAttribute="centerX" secondItem="9wI-ba-K0B" secondAttribute="centerX" id="QgG-LY-Nnl"/>
                             <constraint firstItem="Xi4-9H-yr2" firstAttribute="top" secondItem="yC6-yM-3ov" secondAttribute="bottom" id="Rxq-06-VMN"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Xi4-9H-yr2" secondAttribute="trailing" constant="-10" id="XPk-HN-JiL"/>
                             <constraint firstItem="yC6-yM-3ov" firstAttribute="trailing" secondItem="9wI-ba-K0B" secondAttribute="trailingMargin" constant="20" id="b9a-BG-nrC"/>
-                            <constraint firstAttribute="bottomMargin" secondItem="Xi4-9H-yr2" secondAttribute="bottom" id="iAz-Fl-NuR"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="Xi4-9H-yr2" secondAttribute="bottom" constant="66" id="iAz-Fl-NuR"/>
                             <constraint firstItem="eBO-RC-v1R" firstAttribute="bottom" secondItem="yC6-yM-3ov" secondAttribute="top" id="igo-Cn-gus"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="d0O-C1-mdH" secondAttribute="bottom" id="j4j-fj-unb"/>
+                            <constraint firstItem="O9W-h7-Mly" firstAttribute="bottom" secondItem="9wI-ba-K0B" secondAttribute="bottomMargin" id="nHk-Co-Nh7"/>
                             <constraint firstItem="yC6-yM-3ov" firstAttribute="leading" secondItem="9wI-ba-K0B" secondAttribute="leadingMargin" constant="-20" id="xOv-PT-SB4"/>
+                            <constraint firstItem="O9W-h7-Mly" firstAttribute="leading" secondItem="9wI-ba-K0B" secondAttribute="leadingMargin" id="zMo-tA-cS3"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="iAz-Fl-NuR"/>
+                                <exclude reference="j4j-fj-unb"/>
+                                <exclude reference="De7-Mu-QDk"/>
+                            </mask>
+                        </variation>
                     </view>
                     <connections>
                         <outlet property="barNav" destination="yC6-yM-3ov" id="4bQ-bx-obk"/>

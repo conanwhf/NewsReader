@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import iAd
 
 private var last = (offset: CGPoint(x: 0,y: 0), ch: 0, news: NewsType.wenxuecity )
 private let  queue_getListInfo = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);//dispatch_queue_create("GetListInfo",DISPATCH_QUEUE_SERIAL)
@@ -17,13 +18,18 @@ class ListViewController: UIViewController {
     @IBOutlet weak var channel: UISegmentedControl!
     @IBOutlet var ListTableView: UITableView!
     @IBOutlet weak var loading: UIActivityIndicatorView!
+    @IBOutlet weak var listAd: ADBannerView!
+
     private var selectPost = 0
     private let sliding = UIRefreshControl()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         // Do any additional setup after loading the view, typically from a nib.
+        //添加广告
+        self.canDisplayBannerAds = true
+        //self.myAd.delegate = self
+        //self.myAd.hidden = true
         channel.removeAllSegments()
         for (i, j) in wxcChannelArr.enumerate() {
             channel.insertSegmentWithTitle(j, atIndex: i, animated: false)

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		277FE72C1C242D26004AE026 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277FE72B1C242D26004AE026 /* ListViewController.swift */; };
 		277FE72E1C2430EF004AE026 /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277FE72D1C2430EF004AE026 /* PostViewController.swift */; };
+		2783923D1C4D211600964A59 /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2783923C1C4D211600964A59 /* iAd.framework */; };
 		27881B941C22668500C6F919 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27881B931C22668500C6F919 /* AppDelegate.swift */; };
 		27881B991C22668500C6F919 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 27881B971C22668500C6F919 /* Main.storyboard */; };
 		27881B9C1C22668500C6F919 /* NewsReader.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 27881B9A1C22668500C6F919 /* NewsReader.xcdatamodeld */; };
@@ -56,6 +57,7 @@
 /* Begin PBXFileReference section */
 		277FE72B1C242D26004AE026 /* ListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		277FE72D1C2430EF004AE026 /* PostViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
+		2783923C1C4D211600964A59 /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
 		27881B901C22668500C6F919 /* NewsReader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NewsReader.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		27881B931C22668500C6F919 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		27881B981C22668500C6F919 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -81,6 +83,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2783923D1C4D211600964A59 /* iAd.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -128,6 +131,7 @@
 		27881B871C22668400C6F919 = {
 			isa = PBXGroup;
 			children = (
+				2783923C1C4D211600964A59 /* iAd.framework */,
 				27881B921C22668500C6F919 /* NewsReader */,
 				27881BAA1C22668500C6F919 /* NewsReaderTests */,
 				27881BB51C22668500C6F919 /* NewsReaderUITests */,
