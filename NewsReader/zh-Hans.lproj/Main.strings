@@ -1,0 +1,18 @@
+
+/* Class = "UINavigationItem"; title = "频道"; ObjectID = "4IU-KT-Tqi"; */
+"4IU-KT-Tqi.title" = "频道";
+
+/* Class = "UIButton"; normalTitle = "返回"; ObjectID = "AFG-Ln-g9y"; */
+"AFG-Ln-g9y.normalTitle" = "返回";
+
+/* Class = "UISegmentedControl"; Net-m3-PdX.segmentTitles[0] = "新闻"; ObjectID = "Net-m3-PdX"; */
+"Net-m3-PdX.segmentTitles[0]" = "新闻";
+
+/* Class = "UISegmentedControl"; Net-m3-PdX.segmentTitles[1] = "娱乐"; ObjectID = "Net-m3-PdX"; */
+"Net-m3-PdX.segmentTitles[1]" = "娱乐";
+
+/* Class = "UILabel"; text = "⏎ 松手返回..."; ObjectID = "d0O-C1-mdH"; */
+"d0O-C1-mdH.text" = "⏎ 松手返回...";
+
+/* Class = "UIButton"; normalTitle = "分享"; ObjectID = "nuj-pL-EwT"; */
+"nuj-pL-EwT.normalTitle" = "分享";
