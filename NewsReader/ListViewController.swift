@@ -28,8 +28,7 @@ class ListViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         //添加广告
         self.canDisplayBannerAds = true
-        //self.myAd.delegate = self
-        //self.myAd.hidden = true
+        //初始化频道
         channel.removeAllSegments()
         for (i, j) in wxcChannelArr.enumerate() {
             channel.insertSegmentWithTitle(j, atIndex: i, animated: false)
@@ -52,6 +51,9 @@ class ListViewController: UIViewController {
         loading.hidesWhenStopped = true
         loading.startAnimating()
         ListTableView.registerClass(ListTableViewCell.self, forCellReuseIdentifier: CELL_ID)
+        //注册横竖屏变化
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "statusBarOrientationChange:", name: UIApplicationDidChangeStatusBarOrientationNotification, object: nil)
+
     }
     
     override func didReceiveMemoryWarning() {
@@ -75,7 +77,7 @@ class ListViewController: UIViewController {
         if cell==nil {
             cell = ListTableViewCell(style: .Default, reuseIdentifier: CELL_ID)
         }
-        
+
         cell!.showListItemInfo(indexPath.row)
         if read.contains( manager.wxcList[indexPath.row].postId ) {
             log("read!@    post=\(manager.wxcList[indexPath.row]), set=\(read)")
@@ -192,4 +194,29 @@ class ListViewController: UIViewController {
         self.updateLatesList()
     }
     
+    func bannerViewDidLoadAd(banner: ADBannerView) {
+        //print("!!!!!!!!!!!!!!!!!!!!!!!!")
+    }
+    
+    func bannerView(banner: ADBannerView, didFailToReceiveAdWithError error: NSError) {
+        //print("3232112213123213213213213123312123")
+    }
+    
+    func statusBarOrientationChange(notification: NSNotification) {
+        let orientation: UIInterfaceOrientation = UIApplication.sharedApplication().statusBarOrientation
+        //print("isPortrait:\(orientation.isPortrait)")
+        ListTableView.reloadData()
+        if orientation == .LandscapeRight {
+            //
+        }
+        if orientation == .LandscapeLeft {
+            //
+        }
+        if orientation == .Portrait {
+            //
+        }
+        if orientation == .PortraitUpsideDown {
+            //
+        }
+    }
   }// End All for ListViewController

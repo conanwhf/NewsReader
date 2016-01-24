@@ -62,6 +62,9 @@ class PostViewController: UIViewController {
         btnBack.layer.cornerRadius = 10
         infoReturn.hidden = true
         view.bringSubviewToFront(infoReturn)
+        post.backgroundColor = UIColor(colorLiteralRed: 249, green: 242, blue: 229, alpha: 255)
+        //注册横竖屏变化
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "statusBarOrientationChange:", name: UIApplicationDidChangeStatusBarOrientationNotification, object: nil)
     }
     
     override func didReceiveMemoryWarning() {
@@ -146,5 +149,11 @@ class PostViewController: UIViewController {
     func scrollViewDidEndDecelerating(scrollView: UIScrollView)  {logn(7)}// called when scroll view grinds to a halt
     func scrollViewDidScrollToTop(scrollView: UIScrollView)  {logn(13)}// called when scrolling animation finished. may be called immediately if already at top
     */
+    func statusBarOrientationChange(notification: NSNotification) {
+        //let orientation: UIInterfaceOrientation = UIApplication.sharedApplication().statusBarOrientation
+        //print("isPortrait:\(orientation.isPortrait)")
+        self.post.attributedText  = self.creatPostText()
+    }
+
 }
 

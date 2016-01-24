@@ -13,14 +13,16 @@ let CELL_ID = "NewsList"
 private let BASE_FONT_SIZE :CGFloat = 18
 private let V_BLANK = 10
 private let ITEM_OFFSET = 5
+private var rects : (img: CGRect, title: CGRect, info: CGRect, width: Int)? = nil
 
 class ListTableViewCell: UITableViewCell {
 
     var img:UIImageView!
     var title:UILabel!
     var info:UILabel!
-    
-    func layout() ->(frameImg: CGRect, FrameTitle: CGRect, FrameInfo: CGRect){
+
+    //func reLayout() ->(frameImg: CGRect, FrameTitle: CGRect, FrameInfo: CGRect){
+    func reLayout() {
         let totalx = Int(self.frame.width)
         let totaly = Int(self.frame.height)
         let img_w = (totaly-ITEM_OFFSET*2)*4/3
@@ -31,20 +33,23 @@ class ListTableViewCell: UITableViewCell {
         let frameImg = CGRect(x: V_BLANK, y: ITEM_OFFSET, width: img_w, height: totaly - ITEM_OFFSET*2)
         let frameTitle = CGRect(x: title_x, y: ITEM_OFFSET, width: title_w, height: title_h)
         let frameInfo = CGRect(x: title_x, y: ITEM_OFFSET*2+Int(frameTitle.height), width: title_w, height: totaly - ITEM_OFFSET*3-title_h)
-
-        return (frameImg, frameTitle, frameInfo)
+        rects = (frameImg, frameTitle, frameInfo, totalx)
+        //return (frameImg, frameTitle, frameInfo)
     }
     
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
+        //self.frame.size = CGSize(width: UIScreen.mainScreen().bounds.size.width, height: 75)
         self.frame.size = CGSize(width: frame.width, height: 75)
         //log(self.frame,"111111111")
-        let temp = self.layout()
-        title = UILabel(frame: temp.1)
-        info = UILabel(frame: temp.2)
-        img = UIImageView(frame: temp.0)
+        if rects==nil {
+            reLayout()
+        }
+        title = UILabel(frame: rects!.title)
+        info = UILabel(frame: rects!.info)
+        img = UIImageView(frame: rects!.img)
         self.addSubview(title)
         self.addSubview(info)
         self.addSubview(img)
@@ -56,6 +61,17 @@ class ListTableViewCell: UITableViewCell {
     }
 
     func showListItemInfo(index: Int){
+        // Resize frame if any View Changed
+        if Int(frame.width) != rects!.width {
+            //log("cell\(index).frame=\(frame), rects.width=\(rects!.width)")
+            reLayout()
+        }
+        if title.frame.width !=  rects!.title.width {
+            title.frame.size =  rects!.title.size
+            info.frame.size =  rects!.info.size
+            img.frame.size =  rects!.img.size
+        }
+        
        //Title Config
         title.lineBreakMode = .ByClipping
 //            title.font = UIFont.systemFontOfSize(BASE_FONT_SIZE)
