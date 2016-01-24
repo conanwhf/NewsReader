@@ -83,7 +83,7 @@ class NewsDataManager {
             wxc.post = WxcPostItem(fromdict: newpost)
             //log(wxc.post?.content)
         } catch {
-            print("JSONObjectWithData: \(error)")
+            NSLog("JSONObjectWithData: \(error)")
         }
     }
     
