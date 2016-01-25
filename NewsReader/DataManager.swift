@@ -16,14 +16,14 @@ func log <T> (message: T , _ marker: AnyObject? = nil )  {
         //print(" \(__FUNCTION__) in \(__FILE__): \(message), from \(self)")
         NSLog("\(message), mark: \(marker)")
     #else
-        print("\(message), mark: \(marker)")
+        //print("\(message), mark: \(marker)")
     #endif
 }
 func logn (n :Int )  {
     #if DEBUG
         NSlog("\(n)\(n)\(n)\(n)\(n)\(n)\(n)\(n)\(n)\(n)\(n)\(n)\(n)\(n)")
     #else
-        print("\(n)\(n)\(n)\(n)\(n)\(n)\(n)\(n)\(n)\(n)\(n)\(n)\(n)\(n)")
+        //print("\(n)\(n)\(n)\(n)\(n)\(n)\(n)\(n)\(n)\(n)\(n)\(n)\(n)\(n)")
     #endif
 }
 

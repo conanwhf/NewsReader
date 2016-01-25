@@ -148,23 +148,6 @@
                                     <outlet property="delegate" destination="ZIL-xU-OfT" id="1GL-cS-pMT"/>
                                 </connections>
                             </navigationBar>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="⏎ 松手返回..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d0O-C1-mdH">
-                                <rect key="frame" x="200" y="499" width="200" height="30"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="200" id="5yn-KM-ScS"/>
-                                    <constraint firstAttribute="height" constant="30" id="g4v-be-BYU"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="0.15255270849814589" green="0.2028623731456547" blue="0.66317626527050599" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <adBannerView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="O9W-h7-Mly">
-                                <rect key="frame" x="20" y="534" width="560" height="66"/>
-                                <connections>
-                                    <outlet property="delegate" destination="ZIL-xU-OfT" id="UNR-EG-LuG"/>
-                                </connections>
-                            </adBannerView>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xi4-9H-yr2">
                                 <rect key="frame" x="10" y="64" width="580" height="470"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -181,6 +164,24 @@
                                     <outlet property="delegate" destination="ZIL-xU-OfT" id="9bJ-Mw-5Ec"/>
                                 </connections>
                             </textView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="⏎ 松手返回..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d0O-C1-mdH">
+                                <rect key="frame" x="200" y="499" width="200" height="30"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <color key="tintColor" red="0.15255270849999999" green="0.20286237309999999" blue="0.66317626529999996" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="5yn-KM-ScS"/>
+                                    <constraint firstAttribute="height" constant="30" id="g4v-be-BYU"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                <color key="textColor" red="0.15255270849814589" green="0.2028623731456547" blue="0.66317626527050599" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <adBannerView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="O9W-h7-Mly">
+                                <rect key="frame" x="20" y="534" width="560" height="66"/>
+                                <connections>
+                                    <outlet property="delegate" destination="ZIL-xU-OfT" id="UNR-EG-LuG"/>
+                                </connections>
+                            </adBannerView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>

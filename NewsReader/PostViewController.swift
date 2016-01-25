@@ -59,7 +59,7 @@ class PostViewController: UIViewController {
         post.bounces = true
         btnShare.layer.cornerRadius = 10
         btnBack.layer.cornerRadius = 10
-        //infoReturn.hidden = true
+        infoReturn.hidden = true
         view.bringSubviewToFront(infoReturn)
     }
     
@@ -130,6 +130,7 @@ class PostViewController: UIViewController {
         {
             log("松手返回")//触发返回
             infoReturn.hidden = false
+            log("text=\(infoReturn.text), frame=\(infoReturn.frame)")
             //self.performSegueWithIdentifier("BackToList", sender: self)//跳转到下一个页面，使用转场“BackToList”
         }
         if (scrollView.contentOffset.y < (scrollView.contentSize.height - scrollView.frame.size.height) + (scrollView.frame.size.height / 5) ) && (!infoReturn.hidden){
