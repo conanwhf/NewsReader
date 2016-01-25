@@ -203,20 +203,8 @@ class ListViewController: UIViewController {
     }
     
     func statusBarOrientationChange(notification: NSNotification) {
-        let orientation: UIInterfaceOrientation = UIApplication.sharedApplication().statusBarOrientation
+        //let orientation: UIInterfaceOrientation = UIApplication.sharedApplication().statusBarOrientation
         //print("isPortrait:\(orientation.isPortrait)")
         ListTableView.reloadData()
-        if orientation == .LandscapeRight {
-            //
-        }
-        if orientation == .LandscapeLeft {
-            //
-        }
-        if orientation == .Portrait {
-            //
-        }
-        if orientation == .PortraitUpsideDown {
-            //
-        }
     }
   }// End All for ListViewController

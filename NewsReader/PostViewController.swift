@@ -30,7 +30,7 @@ class PostViewController: UIViewController {
     
     var postid : Int = 0
     private let  queue_getPost = dispatch_queue_create("PostInfo",DISPATCH_QUEUE_SERIAL)
-//    private var willReturn = false
+    //private let  queue_getPost = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
     private var data : WxcPostItem? = nil
     
     override func viewDidLoad() {
@@ -48,10 +48,9 @@ class PostViewController: UIViewController {
                     log("No post data",self)
                     return
                 }
-                let temp = self.creatPostText()
                 dispatch_async(dispatch_get_main_queue()){
                     self.barNav.topItem?.title = self.data!.subid
-                    self.post.attributedText = temp
+                    self.post.attributedText = self.creatPostText()
                 }
             }
         }
@@ -60,11 +59,17 @@ class PostViewController: UIViewController {
         post.bounces = true
         btnShare.layer.cornerRadius = 10
         btnBack.layer.cornerRadius = 10
-        infoReturn.hidden = true
+        //infoReturn.hidden = true
         view.bringSubviewToFront(infoReturn)
-        post.backgroundColor = UIColor(colorLiteralRed: 249, green: 242, blue: 229, alpha: 255)
-        //注册横竖屏变化
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "statusBarOrientationChange:", name: UIApplicationDidChangeStatusBarOrientationNotification, object: nil)
+    }
+    
+    
+    override func viewDidLayoutSubviews(){
+        super.viewDidLayoutSubviews()
+        //log("----postwidth = \(post.frame.width), UIsize=\(UIScreen.mainScreen().bounds.size), scale=\(UIScreen.mainScreen().scale)",self)
+        if (data != nil) {
+            self.post.attributedText = self.creatPostText()
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -74,18 +79,19 @@ class PostViewController: UIViewController {
     
     private func creatPostText() -> NSMutableAttributedString {
         let htmlopt = [NSDocumentTypeDocumentAttribute:NSHTMLTextDocumentType]
-        let img_width = Int(UIScreen.mainScreen().bounds.width-30)
+        //let img_width = Int(UIScreen.mainScreen().bounds.width-30)
+        let img_width = Int(post.frame.width-30)
         var config : String
         var st : String
-        
+       
         log("postwidth = \(post.frame.width), UIsize=\(UIScreen.mainScreen().bounds.size), scale=\(UIScreen.mainScreen().scale)",self)
         config = "img{max-width:\(img_width)px !important;}"   //img style
-        config.appendContentsOf("body {font-size:\(DEFAULT_FONT_SIZE)px;}")   //body style
+        config.appendContentsOf("body {font-size:\(DEFAULT_FONT_SIZE)px; background-color:#F9F2FF;}")   //body style
         config.appendContentsOf("h1{font-size: \(DEFAULT_FONT_SIZE+4)px}")      //title style
         config.appendContentsOf("h2{font-size: \(DEFAULT_FONT_SIZE-2)px; color:grey}")      //info style
         config.appendContentsOf("com{font-size: \(DEFAULT_FONT_SIZE-1)px; color:#070F50; font-famliy:Cursive}")      //coment style
         config = "<head><style>" + config + "</style></head>"
-        
+
         //Title
         st = "<h1>\(data!.title)</h1>"
         //Author & date
@@ -101,6 +107,7 @@ class PostViewController: UIViewController {
         })
         st.appendContentsOf("</com>")
         st = config + st
+
         do {
             return (try NSMutableAttributedString(data: st.dataUsingEncoding(NSUnicodeStringEncoding)!, options:htmlopt, documentAttributes: nil))
         }catch {
@@ -149,11 +156,5 @@ class PostViewController: UIViewController {
     func scrollViewDidEndDecelerating(scrollView: UIScrollView)  {logn(7)}// called when scroll view grinds to a halt
     func scrollViewDidScrollToTop(scrollView: UIScrollView)  {logn(13)}// called when scrolling animation finished. may be called immediately if already at top
     */
-    func statusBarOrientationChange(notification: NSNotification) {
-        //let orientation: UIInterfaceOrientation = UIApplication.sharedApplication().statusBarOrientation
-        //print("isPortrait:\(orientation.isPortrait)")
-        self.post.attributedText  = self.creatPostText()
-    }
-
 }
 

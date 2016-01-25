@@ -41,7 +41,7 @@
                                         <rect key="frame" x="0.0" y="28" width="580" height="75"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="UQn-F2-2t8" id="Az1-CR-yYs">
-                                            <rect key="frame" x="0.0" y="0.0" width="580" height="75"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="580" height="74.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                         <accessibility key="accessibilityConfiguration">
@@ -149,16 +149,22 @@
                                 </connections>
                             </navigationBar>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="⏎ 松手返回..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d0O-C1-mdH">
-                                <rect key="frame" x="200" y="514" width="200" height="20"/>
+                                <rect key="frame" x="200" y="499" width="200" height="30"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="200" id="5yn-KM-ScS"/>
-                                    <constraint firstAttribute="height" constant="20" id="g4v-be-BYU"/>
+                                    <constraint firstAttribute="height" constant="30" id="g4v-be-BYU"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.15255270849814589" green="0.2028623731456547" blue="0.66317626527050599" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <adBannerView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="O9W-h7-Mly">
+                                <rect key="frame" x="20" y="534" width="560" height="66"/>
+                                <connections>
+                                    <outlet property="delegate" destination="ZIL-xU-OfT" id="UNR-EG-LuG"/>
+                                </connections>
+                            </adBannerView>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xi4-9H-yr2">
                                 <rect key="frame" x="10" y="64" width="580" height="470"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -175,12 +181,6 @@
                                     <outlet property="delegate" destination="ZIL-xU-OfT" id="9bJ-Mw-5Ec"/>
                                 </connections>
                             </textView>
-                            <adBannerView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="O9W-h7-Mly">
-                                <rect key="frame" x="20" y="534" width="560" height="66"/>
-                                <connections>
-                                    <outlet property="delegate" destination="ZIL-xU-OfT" id="UNR-EG-LuG"/>
-                                </connections>
-                            </adBannerView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -197,15 +197,19 @@
                             <constraint firstItem="eBO-RC-v1R" firstAttribute="bottom" secondItem="yC6-yM-3ov" secondAttribute="top" id="igo-Cn-gus"/>
                             <constraint firstAttribute="bottomMargin" secondItem="d0O-C1-mdH" secondAttribute="bottom" id="j4j-fj-unb"/>
                             <constraint firstItem="O9W-h7-Mly" firstAttribute="top" secondItem="d0O-C1-mdH" secondAttribute="bottom" id="mhp-kw-Wf5"/>
+                            <constraint firstItem="O9W-h7-Mly" firstAttribute="top" secondItem="d0O-C1-mdH" secondAttribute="bottom" constant="5" id="mxc-7R-kMO"/>
                             <constraint firstItem="O9W-h7-Mly" firstAttribute="bottom" secondItem="9wI-ba-K0B" secondAttribute="bottomMargin" id="nHk-Co-Nh7"/>
                             <constraint firstItem="yC6-yM-3ov" firstAttribute="leading" secondItem="9wI-ba-K0B" secondAttribute="leadingMargin" constant="-20" id="xOv-PT-SB4"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="d0O-C1-mdH" secondAttribute="bottom" id="xZt-ZI-NqD"/>
                             <constraint firstItem="O9W-h7-Mly" firstAttribute="leading" secondItem="9wI-ba-K0B" secondAttribute="leadingMargin" id="zMo-tA-cS3"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
                                 <exclude reference="iAz-Fl-NuR"/>
-                                <exclude reference="N1h-Op-8rN"/>
                                 <exclude reference="j4j-fj-unb"/>
+                                <exclude reference="xZt-ZI-NqD"/>
+                                <exclude reference="N1h-Op-8rN"/>
+                                <exclude reference="mhp-kw-Wf5"/>
                                 <exclude reference="De7-Mu-QDk"/>
                             </mask>
                         </variation>
