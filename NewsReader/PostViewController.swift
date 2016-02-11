@@ -26,7 +26,6 @@ class PostViewController: UIViewController {
     @IBOutlet weak var btnBack: UIButton!
     @IBOutlet weak var post: UITextView!
     @IBOutlet weak var infoReturn: UILabel!
-    @IBOutlet weak var postAd: ADBannerView!
     
     var postid : Int = 0
     private let  queue_getPost = dispatch_queue_create("PostInfo",DISPATCH_QUEUE_SERIAL)
@@ -39,7 +38,6 @@ class PostViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         log("in controller, id =\(postid)",self)
         
-        self.canDisplayBannerAds = true
         if (self.data == nil) {//first time
             dispatch_async(queue_getPost){
                 manager.updateData(.wenxuecity, mode: .post, id: self.postid)

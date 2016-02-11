@@ -18,7 +18,6 @@ class ListViewController: UIViewController {
     @IBOutlet weak var channel: UISegmentedControl!
     @IBOutlet var ListTableView: UITableView!
     @IBOutlet weak var loading: UIActivityIndicatorView!
-    @IBOutlet weak var listAd: ADBannerView!
 
     private var selectPost = 0
     private let sliding = UIRefreshControl()
@@ -26,8 +25,7 @@ class ListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        //添加广告
-        self.canDisplayBannerAds = true
+      
         //初始化频道
         channel.removeAllSegments()
         for (i, j) in wxcChannelArr.enumerate() {
@@ -194,17 +192,4 @@ class ListViewController: UIViewController {
         self.updateLatesList()
     }
     
-    func bannerViewDidLoadAd(banner: ADBannerView) {
-        //print("!!!!!!!!!!!!!!!!!!!!!!!!")
-    }
-    
-    func bannerView(banner: ADBannerView, didFailToReceiveAdWithError error: NSError) {
-        //print("3232112213123213213213213123312123")
-    }
-    
-    func statusBarOrientationChange(notification: NSNotification) {
-        //let orientation: UIInterfaceOrientation = UIApplication.sharedApplication().statusBarOrientation
-        //print("isPortrait:\(orientation.isPortrait)")
-        ListTableView.reloadData()
-    }
-  }// End All for ListViewController
+}// End All for ListViewController
