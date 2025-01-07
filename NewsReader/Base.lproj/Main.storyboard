@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--List View Controller-->
@@ -15,11 +16,10 @@
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Net-m3-PdX">
-                                <rect key="frame" x="70" y="20" width="460" height="29"/>
                                 <segments>
                                     <segment title="新闻"/>
                                     <segment title="娱乐"/>
@@ -29,19 +29,18 @@
                                 </connections>
                             </segmentedControl>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="75" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="En1-Gs-s04">
-                                <rect key="frame" x="10" y="58" width="580" height="542"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <gestureRecognizers/>
                                 <activityIndicatorView key="tableFooterView" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" id="BDI-9B-wpA">
-                                    <rect key="frame" x="0.0" y="103" width="580" height="20"/>
+                                    <rect key="frame" x="0.0" y="103" width="363" height="20"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 </activityIndicatorView>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="UQn-F2-2t8" customClass="ListTableViewCell" customModule="NewsReader" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="580" height="75"/>
+                                        <rect key="frame" x="0.0" y="28" width="363" height="75"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="UQn-F2-2t8" id="Az1-CR-yYs">
-                                            <rect key="frame" x="0.0" y="0.0" width="580" height="74"/>
+                                            <frame key="frameInset" width="363" height="74.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                         <accessibility key="accessibilityConfiguration">
@@ -58,7 +57,7 @@
                                 </connections>
                             </tableView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="En1-Gs-s04" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-10" id="AvX-cU-2pW"/>
@@ -106,20 +105,19 @@
                         <viewControllerLayoutGuide type="bottom" id="tiJ-we-c5C"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="9wI-ba-K0B">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yC6-yM-3ov">
-                                <rect key="frame" x="0.0" y="20" width="600" height="44"/>
                                 <items>
                                     <navigationItem title="频道" id="4IU-KT-Tqi">
                                         <barButtonItem key="leftBarButtonItem" style="plain" id="GOO-SN-Dcw">
                                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="AFG-Ln-g9y">
-                                                <rect key="frame" x="20" y="7" width="45" height="30"/>
+                                                <rect key="frame" x="16" y="7" width="45" height="30"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <state key="normal" title="返回">
-                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </state>
                                                 <connections>
                                                     <segue destination="BYZ-38-t0r" kind="show" identifier="BackToList" id="ytQ-GO-BTf"/>
@@ -128,11 +126,11 @@
                                         </barButtonItem>
                                         <barButtonItem key="rightBarButtonItem" style="done" id="CDe-aN-Ltv">
                                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="nuj-pL-EwT">
-                                                <rect key="frame" x="535" y="7" width="45" height="30"/>
+                                                <rect key="frame" x="322" y="7" width="45" height="30"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <state key="normal" title="分享">
-                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </state>
                                                 <connections>
                                                     <action selector="sharePost:" destination="ZIL-xU-OfT" eventType="touchUpInside" id="Pn7-SN-ged"/>
@@ -146,8 +144,7 @@
                                 </connections>
                             </navigationBar>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xi4-9H-yr2">
-                                <rect key="frame" x="10" y="64" width="580" height="536"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <attributedString key="attributedText">
                                     <fragment content="Loading....">
                                         <attributes>
@@ -162,19 +159,18 @@
                                 </connections>
                             </textView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="⏎ 松手返回..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d0O-C1-mdH">
-                                <rect key="frame" x="200" y="560" width="200" height="30"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <color key="tintColor" red="0.15255270849999999" green="0.20286237309999999" blue="0.66317626529999996" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="tintColor" red="0.15255270849999999" green="0.20286237309999999" blue="0.66317626529999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="200" id="5yn-KM-ScS"/>
                                     <constraint firstAttribute="height" constant="30" id="g4v-be-BYU"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
-                                <color key="textColor" red="0.15255270849814589" green="0.2028623731456547" blue="0.66317626527050599" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="textColor" red="0.15255270849814589" green="0.2028623731456547" blue="0.66317626527050599" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="tiJ-we-c5C" firstAttribute="top" secondItem="d0O-C1-mdH" secondAttribute="bottom" id="De7-Mu-QDk"/>
                             <constraint firstItem="Xi4-9H-yr2" firstAttribute="leading" secondItem="9wI-ba-K0B" secondAttribute="leadingMargin" constant="-10" id="JR5-88-CVH"/>

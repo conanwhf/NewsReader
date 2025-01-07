@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-private let default_logo = NSData(contentsOfURL: NSURL(string: "http://www.wenxuecity.com/images/wxc-logo.gif")!)
+private let default_logo = try? Data(contentsOf: URL(string: "http://www.wenxuecity.com/images/wxc-logo.gif")!)
 
 /**
  *  List Item, info for each item in list
@@ -19,7 +19,7 @@ class WxcItems : Comparable {
     var title: String = ""
     var time : String = ""
     
-    private enum ItemLable : String {
+    fileprivate enum ItemLable : String {
         case postid  = "postid"
         case subid     = "subid"
         case title   = "title"
@@ -45,14 +45,14 @@ class WxcItems : Comparable {
         }
     }
     
-    private func checkDataAviliable(fromdict dict: [ String: AnyObject ], musthave must: ItemLable...) -> Bool {
+    fileprivate func checkDataAviliable(fromdict dict: [ String: AnyObject ], musthave must: ItemLable...) -> Bool {
         let hasKeys = dict.keys
         var ret = true
         must.forEach({ret = ret && hasKeys.contains($0.rawValue)})
         return ret
     }
     
-    private func refresh < T1, T2 > (inout target: T1, value : T2?){
+    fileprivate func refresh < T1, T2 > (_ target: inout T1, value : T2?){
         let test = value as? T1
         target = ((test == nil) ? target : (test!))
     }
@@ -63,8 +63,8 @@ class WxcItems : Comparable {
 // List Item, info for each item in list
 class WxcListItem : WxcItems {
     var count : Int = 0
-    private var images : Array<String> = []
-    private var imgdata : NSData? = nil
+    fileprivate var images : Array<String> = []
+    fileprivate var imgdata : Data? = nil
     //private let _DEFAULT_LOGO_ = "http://www.wenxuecity.com/images/wxc-logo.gif"
     
     
@@ -76,10 +76,10 @@ class WxcListItem : WxcItems {
         }
         dict!.forEach({
             switch $0.0 {
-            case ItemLable.postid.rawValue :    refresh(&postId, value: $0.1.integerValue)
+            case ItemLable.postid.rawValue :    refresh(&postId, value: ($0.1 as? NSNumber)?.intValue)
             case ItemLable.title.rawValue :         refresh(&title, value: $0.1)
             case ItemLable.dateline.rawValue :  refresh(&time, value: $0.1)
-            case ItemLable.count.rawValue :     refresh(&count, value: $0.1.integerValue)
+            case ItemLable.count.rawValue :     refresh(&count, value: ($0.1 as? NSNumber)?.intValue)
             case ItemLable.images.rawValue :    //refresh(&images, value: $0.1)
                 let temp = $0.1 as? Array<String>
                 temp?.forEach{ images.append($0)}
@@ -93,7 +93,7 @@ class WxcListItem : WxcItems {
     func updateLogo() {
         if imgdata == nil {
             log("img for \(self.postId), url=" + (self.images.isEmpty ? "nil" : "\(self.images[0])"))
-            self.imgdata = self.images.isEmpty ? default_logo :NSData(contentsOfURL: NSURL(string: self.images[0])!)
+            self.imgdata = self.images.isEmpty ? default_logo :(try? Data(contentsOf: URL(string: self.images[0])!))
             /*
             let before = UIImage(data: imgdata!)
             let after = reSizeImage(before!, toSize: CGSize(width: 150,height: 150))
@@ -103,7 +103,7 @@ class WxcListItem : WxcItems {
         }
     }
     
-    var logodata : NSData?{
+    var logodata : Data?{
         get {
             return imgdata == nil ? default_logo : imgdata
             /*
@@ -117,13 +117,14 @@ class WxcListItem : WxcItems {
         }
     }
     
-    func reSizeImage(image: UIImage, var toSize reSize: CGSize) -> UIImage {
+    func reSizeImage(_ image: UIImage, toSize reSize: CGSize) -> UIImage {
+        var reSize = reSize
         let temp:Float = Float(image.size.width) / Float(reSize.width)
         reSize.height = CGFloat(Float(image.size.height) / temp)
         //print(reSize)
-        UIGraphicsBeginImageContext(CGSizeMake(reSize.width, reSize.height))
-        image.drawInRect(CGRectMake(0, 0, reSize.width, reSize.height))
-        let reSizeImage: UIImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsBeginImageContext(CGSize(width: reSize.width, height: reSize.height))
+        image.draw(in: CGRect(x: 0, y: 0, width: reSize.width, height: reSize.height))
+        let reSizeImage: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
         return reSizeImage
     }
@@ -146,7 +147,7 @@ class WxcPostComment  : WxcItems{
         
         dict!.forEach({
             switch $0.0 {
-            case ItemLable.postid.rawValue :    refresh(&postId, value: $0.1.integerValue)
+            case ItemLable.postid.rawValue :    refresh(&postId, value: ($0.1 as? NSNumber)?.intValue)
             case ItemLable.content.rawValue :   refresh(&content, value: $0.1)
             case ItemLable.dateline.rawValue :  refresh(&time, value: $0.1)
             case ItemLable.usr.rawValue :           refresh(&usr, value: $0.1)
@@ -180,20 +181,20 @@ class WxcPostItem : WxcItems {
         
         dict!.forEach({
             switch $0.0 {
-            case ItemLable.postid.rawValue :        refresh(&postId, value: $0.1.integerValue)
+            case ItemLable.postid.rawValue :        refresh(&postId, value: ($0.1 as? NSNumber)?.intValue)
             case ItemLable.title.rawValue :             refresh(&title, value: $0.1)
             case ItemLable.content.rawValue :       refresh(&content, value: $0.1)
             case ItemLable.datetime.rawValue :     refresh(&time, value: $0.1)
             case ItemLable.images.rawValue :       refresh(&images, value: $0.1)
             case ItemLable.subid.rawValue :          refresh(&subid, value: $0.1)
             case ItemLable.author.rawValue :         refresh(&author, value: $0.1)
-            case ItemLable.basecode.rawValue :    refresh(&basecode, value: $0.1.integerValue)
-            case ItemLable.count.rawValue :         refresh(&count, value: $0.1.integerValue)
+            case ItemLable.basecode.rawValue :    refresh(&basecode, value: ($0.1 as? NSNumber)?.intValue)
+            case ItemLable.count.rawValue :         refresh(&count, value: ($0.1 as? NSNumber)?.intValue)
             case ItemLable.url.rawValue :               refresh(&url, value: $0.1)
             case ItemLable.comment.rawValue :
                 let temp = $0.1 as? Array<AnyObject>
                 temp?.forEach({
-                    let new = WxcPostComment(fromdict: ($0 as! ([ String: String]) ))
+                    let new = WxcPostComment(fromdict: ($0 as! ([ String: String]) as [String : AnyObject]? ))
                     if new != nil {
                         comment.append(new!)
                     }
@@ -213,4 +214,3 @@ func < (lhs: WxcItems, rhs: WxcItems) -> Bool {
 func == (lhs: WxcItems, rhs: WxcItems) -> Bool{
     return lhs.postId == rhs.postId
 }
-

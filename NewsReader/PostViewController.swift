@@ -28,7 +28,7 @@ class PostViewController: UIViewController {
     @IBOutlet weak var infoReturn: UILabel!
     
     var postid : Int = 0
-    private let  queue_getPost = dispatch_queue_create("PostInfo",DISPATCH_QUEUE_SERIAL)
+    private let queue_getPost = DispatchQueue(label: "PostInfo")
     //private let  queue_getPost = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
     private var data : WxcPostItem? = nil
     
@@ -39,25 +39,25 @@ class PostViewController: UIViewController {
         log("in controller, id =\(postid)",self)
         
         if (self.data == nil) {//first time
-            dispatch_async(queue_getPost){
+            queue_getPost.async {
                 manager.updateData(.wenxuecity, mode: .post, id: self.postid)
                 self.data = manager.wxcPost
                 guard self.data != nil else{
                     log("No post data",self)
                     return
                 }
-                dispatch_async(dispatch_get_main_queue()){
+                DispatchQueue.main.async {
                     self.barNav.topItem?.title = self.data!.subid
                     self.post.attributedText = self.creatPostText()
                 }
             }
         }
 
-        post.editable = false
+        post.isEditable = false
         post.bounces = true
         btnShare.layer.cornerRadius = 10
         btnBack.layer.cornerRadius = 10
-        infoReturn.hidden = true
+        infoReturn.isHidden = true
         view.bringSubviewToFront(infoReturn)
     }
     
@@ -76,38 +76,38 @@ class PostViewController: UIViewController {
     }
     
     private func creatPostText() -> NSMutableAttributedString {
-        let htmlopt = [NSDocumentTypeDocumentAttribute:NSHTMLTextDocumentType]
+        let htmlopt: [NSAttributedString.DocumentReadingOptionKey: Any] = [.documentType: NSAttributedString.DocumentType.html]
         //let img_width = Int(UIScreen.mainScreen().bounds.width-30)
         let img_width = Int(post.frame.width-30)
         var config : String
         var st : String
        
-        log("postwidth = \(post.frame.width), UIsize=\(UIScreen.mainScreen().bounds.size), scale=\(UIScreen.mainScreen().scale)",self)
+        log("postwidth = \(post.frame.width), UIsize=\(UIScreen.main.bounds.size), scale=\(UIScreen.main.scale)",self)
         config = "img{max-width:\(img_width)px !important;}"   //img style
-        config.appendContentsOf("body {font-size:\(DEFAULT_FONT_SIZE)px; background-color:#F9F2FF;}")   //body style
-        config.appendContentsOf("h1{font-size: \(DEFAULT_FONT_SIZE+4)px}")      //title style
-        config.appendContentsOf("h2{font-size: \(DEFAULT_FONT_SIZE-2)px; color:grey}")      //info style
-        config.appendContentsOf("com{font-size: \(DEFAULT_FONT_SIZE-1)px; color:#070F50; font-famliy:Cursive}")      //coment style
+        config.append("body {font-size:\(DEFAULT_FONT_SIZE)px; background-color:#F9F2FF;}")   //body style
+        config.append("h1{font-size: \(DEFAULT_FONT_SIZE+4)px}")      //title style
+        config.append("h2{font-size: \(DEFAULT_FONT_SIZE-2)px; color:grey}")      //info style
+        config.append("com{font-size: \(DEFAULT_FONT_SIZE-1)px; color:#070F50; font-famliy:Cursive}")      //coment style
         config = "<head><style>" + config + "</style></head>"
 
         //Title
         st = "<h1>\(data!.title)</h1>"
         //Author & date
-        st.appendContentsOf("<h2>发布：\(data!.time)     来源：\(data!.author)<br/></h2>")
+        st.append("<h2>发布：\(data!.time)     来源：\(data!.author)<br/></h2>")
         // NOT include : data!.count
         //Content
-        st.appendContentsOf(data!.content)
-        st.appendContentsOf("<hr/>-------------------------------<br/>")
+        st.append(data!.content)
+        st.append("<hr/>-------------------------------<br/>")
         //Comment
-        st.appendContentsOf("<com>")
+        st.append("<com>")
         data!.comment.forEach({
-            st.appendContentsOf("<b>\($0.usr) 发表于 \($0.time)</b><br/><i>\($0.content)</i><br/><br/>")
+            st.append("<b>\($0.usr) 发表于 \($0.time)</b><br/><i>\($0.content)</i><br/><br/>")
         })
-        st.appendContentsOf("</com>")
+        st.append("</com>")
         st = config + st
 
         do {
-            return (try NSMutableAttributedString(data: st.dataUsingEncoding(NSUnicodeStringEncoding)!, options:htmlopt, documentAttributes: nil))
+            return (try NSMutableAttributedString(data: st.data(using: .unicode)!, options:htmlopt, documentAttributes: nil))
         }catch {
             print(error)
         }
@@ -115,34 +115,34 @@ class PostViewController: UIViewController {
     }
     
     @IBAction func sharePost(sender: AnyObject) {
-            log("share url:\(data?.url)")
+        log("share url:\(String(describing: data?.url))")
         
             let shareItems: [AnyObject] = [NSURL(string: data!.url)!]
             let share = UIActivityViewController(activityItems: shareItems, applicationActivities: nil)
             //share.excludedActivityTypes = [UIActivityTypePrint, UIActivityTypeCopyToPasteboard, UIActivityTypeAssignToContact, UIActivityTypeSaveToCameraRoll]
-            self.presentViewController(share, animated: true, completion: { _ in })
+        self.present(share, animated: true, completion: {  })
         }
 
     func scrollViewDidScroll(scrollView: UIScrollView) {
-        if (scrollView.contentOffset.y > (scrollView.contentSize.height - scrollView.frame.size.height) + (scrollView.frame.size.height / 4) ) && (infoReturn.hidden) // (scrollView.frame.size.height / 4)是触发操作的阀值
+        if (scrollView.contentOffset.y > (scrollView.contentSize.height - scrollView.frame.size.height) + (scrollView.frame.size.height / 4) ) && (infoReturn.isHidden) // (scrollView.frame.size.height / 4)是触发操作的阀值
         {
             log("松手返回")//触发返回
-            infoReturn.hidden = false
-            log("text=\(infoReturn.text), frame=\(infoReturn.frame)")
+            infoReturn.isHidden = false
+            log("text=\(String(describing: infoReturn.text)), frame=\(infoReturn.frame)")
             //self.performSegueWithIdentifier("BackToList", sender: self)//跳转到下一个页面，使用转场“BackToList”
         }
-        if (scrollView.contentOffset.y < (scrollView.contentSize.height - scrollView.frame.size.height) + (scrollView.frame.size.height / 5) ) && (!infoReturn.hidden){
+        if (scrollView.contentOffset.y < (scrollView.contentSize.height - scrollView.frame.size.height) + (scrollView.frame.size.height / 5) ) && (!infoReturn.isHidden){
             log("取消返回")
-            infoReturn.hidden = true
+            infoReturn.isHidden = true
         }
     }// any offset changes
     
     func scrollViewWillEndDragging(scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>){
 //        log("scrollView.contentOffset=\(scrollView.contentOffset), scrollView.contentSize.height =\(scrollView.contentSize.height ), scrollView.frame.size.height=\(scrollView.frame.size.height), targetContentOffset=\(targetContentOffset), withVelocity=\(velocity)")
-        if (scrollView.contentOffset.y > (scrollView.contentSize.height - scrollView.frame.size.height) + (scrollView.frame.size.height / 5) ) && (!infoReturn.hidden)
+        if (scrollView.contentOffset.y > (scrollView.contentSize.height - scrollView.frame.size.height) + (scrollView.frame.size.height / 5) ) && (!infoReturn.isHidden)
         {
-            log(scrollView.contentOffset.y - (scrollView.contentSize.height - scrollView.frame.size.height),"Post返回")
-            self.performSegueWithIdentifier("BackToList", sender: self)//跳转到下一个页面，使用转场“BackToList”
+            log(scrollView.contentOffset.y - (scrollView.contentSize.height - scrollView.frame.size.height), "Post返回" as NSString)
+            self.performSegue(withIdentifier: "BackToList", sender: self)//跳转到下一个页面，使用转场“BackToList”
         }
     }
 
@@ -156,4 +156,3 @@ class PostViewController: UIViewController {
     func scrollViewDidScrollToTop(scrollView: UIScrollView)  {logn(13)}// called when scrolling animation finished. may be called immediately if already at top
     */
 }
-

@@ -10,8 +10,8 @@ import UIKit
 import iAd
 
 private var last = (offset: CGPoint(x: 0,y: 0), ch: 0, news: NewsType.wenxuecity )
-private let  queue_getListInfo = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);//dispatch_queue_create("GetListInfo",DISPATCH_QUEUE_SERIAL)
-private let  queue_getListImg = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0);
+private let  queue_getListInfo = DispatchQueue.global(qos: .userInitiated)
+private let  queue_getListImg = DispatchQueue.global(qos: .utility)
 private var read : Set<Int> = []
 
 class ListViewController: UIViewController {
@@ -19,8 +19,8 @@ class ListViewController: UIViewController {
     @IBOutlet var ListTableView: UITableView!
     @IBOutlet weak var loading: UIActivityIndicatorView!
 
-    private var selectPost = 0
-    private let sliding = UIRefreshControl()
+    fileprivate var selectPost = 0
+    fileprivate let sliding = UIRefreshControl()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,8 +28,8 @@ class ListViewController: UIViewController {
       
         //初始化频道
         channel.removeAllSegments()
-        for (i, j) in wxcChannelArr.enumerate() {
-            channel.insertSegmentWithTitle(j, atIndex: i, animated: false)
+        for (i, j) in wxcChannelArr.enumerated() {
+            channel.insertSegment(withTitle: j, at: i, animated: false)
         }
         channel.selectedSegmentIndex = last.ch
         if manager.wxcList.isEmpty {
@@ -42,16 +42,18 @@ class ListViewController: UIViewController {
             self.updateImg(-1)
         }
         //添加下拉刷新
-        sliding.addTarget(self, action: "updateLatesList", forControlEvents: UIControlEvents.ValueChanged)
+        sliding.addTarget(self, action: #selector(ListViewController.updateLatesList), for: UIControl.Event.valueChanged)
         sliding.attributedTitle = NSAttributedString(string: "下拉刷新...")
         self.ListTableView.addSubview(sliding)
         //添加上拉更多
         loading.hidesWhenStopped = true
         loading.startAnimating()
-        ListTableView.registerClass(ListTableViewCell.self, forCellReuseIdentifier: CELL_ID)
-        //注册横竖屏变化
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "statusBarOrientationChange:", name: UIApplicationDidChangeStatusBarOrientationNotification, object: nil)
-
+        ListTableView.register(ListTableViewCell.self, forCellReuseIdentifier: CELL_ID)
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        ListTableView.reloadData()
     }
     
     override func didReceiveMemoryWarning() {
@@ -60,60 +62,60 @@ class ListViewController: UIViewController {
     }
    
     //Number of Cell & Section
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSectionsInTableView(_ tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return manager.wxcList.count
     }
     
     //Show Cells
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> ListTableViewCell {
-        var cell = tableView.dequeueReusableCellWithIdentifier(CELL_ID, forIndexPath: indexPath) as? ListTableViewCell
+    func tableView(_ tableView: UITableView, cellForRowAtIndexPath indexPath: IndexPath) -> ListTableViewCell {
+        var cell = tableView.dequeueReusableCell(withIdentifier: CELL_ID, for: indexPath) as? ListTableViewCell
         //log("cellForRowAtIndexPath, index=\(indexPath.row), post=\(manager.wxcList[indexPath.row].postId), title=\(manager.wxcList[indexPath.row].title)", cell)
         if cell==nil {
-            cell = ListTableViewCell(style: .Default, reuseIdentifier: CELL_ID)
+            cell = ListTableViewCell(style: .default, reuseIdentifier: CELL_ID)
         }
 
-        cell!.showListItemInfo(indexPath.row)
-        if read.contains( manager.wxcList[indexPath.row].postId ) {
-            log("read!@    post=\(manager.wxcList[indexPath.row]), set=\(read)")
-            cell!.title.textColor = UIColor.grayColor()
+        cell!.showListItemInfo((indexPath as NSIndexPath).row)
+        if read.contains( manager.wxcList[(indexPath as NSIndexPath).row].postId ) {
+            log("read!@    post=\(manager.wxcList[(indexPath as NSIndexPath).row]), set=\(read)")
+            cell!.title.textColor = UIColor.gray
         }
         else {
-            cell!.title.textColor = UIColor.blackColor()
+            cell!.title.textColor = UIColor.black
         }
         return cell!
     }
 
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath?    {
-        log("will selet, get title =\(manager.wxcList[indexPath.row].title)", self)
-        selectPost = indexPath.row
-        self.performSegueWithIdentifier("ShowPost", sender: self)
+    func tableView(_ tableView: UITableView, didSelectRowAtIndexPath indexPath: IndexPath) -> IndexPath?    {
+        log("will selet, get title =\(manager.wxcList[(indexPath as NSIndexPath).row].title)", self)
+        selectPost = (indexPath as NSIndexPath).row
+        self.performSegue(withIdentifier: "ShowPost", sender: self)
         return indexPath
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        log("id = \(segue.identifier), \(sender.debugDescription)",self)
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        log("id = \(segue.identifier ?? "nil"), \(String(describing: sender))",self)
         // Get the new view controller using segue.destinationViewController, and pass the selected object to the new view controller.
-        let next = segue.destinationViewController as! PostViewController
+        let next = segue.destination as! PostViewController
         next.postid = manager.wxcList[selectPost].postId
         last.offset = self.ListTableView.contentOffset
         last.ch = self.channel.selectedSegmentIndex
         read = read.union([next.postid])
     }
     
-    private func reload(){
-        dispatch_async(dispatch_get_main_queue()){
+    fileprivate func reload(){
+        DispatchQueue.main.async{
             self.ListTableView.reloadData()
             self.loading.stopAnimating()
         }
     }
     
-    private func updateImg(index: Int){
+    fileprivate func updateImg(_ index: Int){
         if index == -1 {
-            dispatch_async(queue_getListImg){
+            queue_getListImg.async{
                 log("add a new job to update images",self)
                 manager.wxcList.forEach({
                     $0.updateLogo()
@@ -122,7 +124,7 @@ class ListViewController: UIViewController {
             }
         }
         else {
-            dispatch_async(queue_getListInfo){
+            queue_getListInfo.async{
                 log("update img for index \(index)",self)
                 manager.wxcList[index].updateLogo()
                 self.reload()
@@ -131,8 +133,8 @@ class ListViewController: UIViewController {
     }
     
     
-    func updateLatesList(){
-        dispatch_async(queue_getListInfo){
+    @objc func updateLatesList(){
+        queue_getListInfo.async{
             log("add a new job to update list info",self)
             manager.updateData(last.news, mode: DataRequestMode.latestItems)
             self.reload()
@@ -141,13 +143,13 @@ class ListViewController: UIViewController {
         }//async end
     }
 
-    func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         //log(scrollView.contentOffset, decelerate)
         if (scrollView.contentOffset.y > (scrollView.contentSize.height - scrollView.frame.size.height) + 70) && (manager.wxcList.count > 0) //70是触发操作的阀值
         {
-            log(scrollView.contentOffset.y - (scrollView.contentSize.height - scrollView.frame.size.height), "44444444444")//触发上拉刷新
+            log(scrollView.contentOffset.y - (scrollView.contentSize.height - scrollView.frame.size.height), "44444444444" as AnyObject?)//触发上拉刷新
             loading.startAnimating()
-            dispatch_async(queue_getListInfo){
+            queue_getListInfo.async{
                 log("add a new job to get more",self)
                 manager.updateData(last.news, mode: DataRequestMode.moreItems)
                 self.reload()
@@ -177,7 +179,7 @@ class ListViewController: UIViewController {
     }//End scrollViewDidEndDragging
     
     
-    @IBAction func channelChanged(sender: AnyObject)  {
+    @IBAction func channelChanged(_ sender: AnyObject)  {
         let segment = sender as! UISegmentedControl
 
         switch (segment.selectedSegmentIndex){

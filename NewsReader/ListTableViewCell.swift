@@ -38,7 +38,7 @@ class ListTableViewCell: UITableViewCell {
     }
     
 
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         //self.frame.size = CGSize(width: UIScreen.mainScreen().bounds.size.width, height: 75)
@@ -60,7 +60,7 @@ class ListTableViewCell: UITableViewCell {
         super.init(coder: aDecoder)!
     }
 
-    func showListItemInfo(index: Int){
+    func showListItemInfo(_ index: Int){
         // Resize frame if any View Changed
         if Int(frame.width) != rects!.width {
             //log("cell\(index).frame=\(frame), rects.width=\(rects!.width)")
@@ -73,23 +73,23 @@ class ListTableViewCell: UITableViewCell {
         }
         
        //Title Config
-        title.lineBreakMode = .ByClipping
+        title.lineBreakMode = .byClipping
 //            title.font = UIFont.systemFontOfSize(BASE_FONT_SIZE)
         title.numberOfLines = 2
         title.adjustsFontSizeToFitWidth = true
         title.text = manager.wxcList[index].title
         
         //Info config
-        info.font = UIFont.systemFontOfSize(BASE_FONT_SIZE-6)
+        info.font = UIFont.systemFont(ofSize: BASE_FONT_SIZE-6)
         info.numberOfLines = 1
 //            info.minimumScaleFactor = 10.0
         info.adjustsFontSizeToFitWidth = true
-        info.textColor = UIColor.grayColor()
+        info.textColor = UIColor.gray
         info.text = "🖊"+manager.wxcList[index].time + "    📖 \(manager.wxcList[index].count)"
         
         // Image config
-        img.image = UIImage(data: manager.wxcList[index].logodata!)
-        img.contentMode = .ScaleAspectFit
+        img.image = UIImage(data: manager.wxcList[index].logodata! as Data)
+        img.contentMode = .scaleAspectFit
         img.layer.masksToBounds = true
         img.layer.cornerRadius = 8.0
     }
@@ -99,7 +99,7 @@ class ListTableViewCell: UITableViewCell {
         // Initialization code
     }
 
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
