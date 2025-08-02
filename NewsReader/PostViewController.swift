@@ -83,23 +83,26 @@ class PostViewController: UIViewController {
         config = "<head><style>" + config + "</style></head>"
 
         // Title
-        st = "<h1>\(data!.title)</h1>"
+        st = "<h1>\(data?.title ?? "No title")</h1>"
         // Author & date
-        st += "<h2>发布：\(data!.time)     来源：\(data!.author)<br/></h2>"
+        st += "<h2>发布：\(data?.time ?? "Unknown time")     来源：\(data?.author ?? "Unknown author")<br/></h2>"
         // NOT include : data!.count
         // Content
-        st += data!.content
+        st += data?.content ?? ""
         st += "<hr/>-------------------------------<br/>"
         // Comment
         st += "<com>"
-        data!.comment.forEach {
+        data?.comment.forEach {
             st += "<b>\($0.usr) 发表于 \($0.time)</b><br/><i>\($0.content)</i><br/><br/>"
         }
         st += "</com>"
         st = config + st
 
         do {
-            return try NSAttributedString(data: st.data(using: .utf8)!, options: htmlopt, documentAttributes: nil)
+            guard let data = st.data(using: .utf8) else {
+                return NSAttributedString(string: "ERROR")
+            }
+            return try NSAttributedString(data: data, options: htmlopt, documentAttributes: nil)
         } catch {
             print(error)
             return NSAttributedString(string: "ERROR")

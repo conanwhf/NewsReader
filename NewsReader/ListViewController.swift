@@ -105,7 +105,7 @@ class ListViewController: UIViewController {
         next.postid = manager.wxcList[selectedPost].postId
         last.offset = self.listTableView.contentOffset
         last.ch = self.channelSegmentedControl.selectedSegmentIndex
-        read = read.union([next.postid])
+        read.insert(next.postid)
     }
     
     private func reload() {
