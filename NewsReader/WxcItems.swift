@@ -1,5 +1,5 @@
 //
-//  wxcItems.swift
+//  WxcItems.swift
 //  NewsReader
 //
 //  Created by Conan on 17/12/15.
@@ -9,83 +9,91 @@
 import Foundation
 import UIKit
 
-private let default_logo = NSData(contentsOfURL: NSURL(string: "http://www.wenxuecity.com/images/wxc-logo.gif")!)
+private let default_logo = NSData(contentsOf: URL(string: "http://www.wenxuecity.com/images/wxc-logo.gif")!)
 
 /**
  *  List Item, info for each item in list
  */
-class WxcItems : Comparable {
-    var postId : Int = 0
+class WxcItems: Comparable {
+    var postId: Int = 0
     var title: String = ""
-    var time : String = ""
+    var time: String = ""
     
-    private enum ItemLable : String {
-        case postid  = "postid"
-        case subid     = "subid"
-        case title   = "title"
-        case dateline     = "dateline"
-        case datetime   = "datetime"
-        case count  = "count"
-        case images  = "images"
-        case author  = "author"
-        case content     = "content"
-        case basecode  = "basecode"
-        case comment    = "comment"
-        case usr   = "username"
-        case usrface   = "userface"
-        case url   = "url"
-        case previous  = "previous_news"
-        case next  = "next_news"
+    private enum ItemLabel: String {
+        case postid = "postid"
+        case subid = "subid"
+        case title = "title"
+        case dateline = "dateline"
+        case datetime = "datetime"
+        case count = "count"
+        case images = "images"
+        case author = "author"
+        case content = "content"
+        case basecode = "basecode"
+        case comment = "comment"
+        case usr = "username"
+        case usrface = "userface"
+        case url = "url"
+        case previous = "previous_news"
+        case next = "next_news"
     }
     
-    init? (fromdict dict: [ String: AnyObject ]?){
+    init? (fromdict dict: [String: Any]?) {
         // dict
-        guard dict != nil else{
+        guard dict != nil else {
             return nil
         }
     }
     
-    private func checkDataAviliable(fromdict dict: [ String: AnyObject ], musthave must: ItemLable...) -> Bool {
+    private func checkDataAvailable(fromdict dict: [String: Any], musthave must: ItemLabel...) -> Bool {
         let hasKeys = dict.keys
         var ret = true
-        must.forEach({ret = ret && hasKeys.contains($0.rawValue)})
+        must.forEach { ret = ret && hasKeys.contains($0.rawValue) }
         return ret
     }
     
-    private func refresh < T1, T2 > (inout target: T1, value : T2?){
-        let test = value as? T1
-        target = ((test == nil) ? target : (test!))
+    private func refresh<T1, T2>(target: inout T1, value: T2?) {
+        if let test = value as? T1 {
+            target = test
+        }
     }
 }
 
 
 
 // List Item, info for each item in list
-class WxcListItem : WxcItems {
-    var count : Int = 0
-    private var images : Array<String> = []
-    private var imgdata : NSData? = nil
+class WxcListItem: WxcItems {
+    var count: Int = 0
+    private var images: [String] = []
+    private var imgdata: NSData? = nil
     //private let _DEFAULT_LOGO_ = "http://www.wenxuecity.com/images/wxc-logo.gif"
     
     
-    override init? (fromdict dict: [ String: AnyObject ]?){
+    override init? (fromdict dict: [String: Any]?) {
         super.init(fromdict: dict)
-        if !checkDataAviliable(fromdict: dict!, musthave: .postid, .title, .dateline, .count) {
+        if !checkDataAvailable(fromdict: dict ?? [:], musthave: .postid, .title, .dateline, .count) {
             //printf("No data needed")
             return nil
         }
-        dict!.forEach({
-            switch $0.0 {
-            case ItemLable.postid.rawValue :    refresh(&postId, value: $0.1.integerValue)
-            case ItemLable.title.rawValue :         refresh(&title, value: $0.1)
-            case ItemLable.dateline.rawValue :  refresh(&time, value: $0.1)
-            case ItemLable.count.rawValue :     refresh(&count, value: $0.1.integerValue)
-            case ItemLable.images.rawValue :    //refresh(&images, value: $0.1)
-                let temp = $0.1 as? Array<String>
-                temp?.forEach{ images.append($0)}
-            default: break
+        dict?.forEach {
+            switch $0.key {
+            case ItemLabel.postid.rawValue:
+                refresh(target: &postId, value: $0.value as? Int)
+            case ItemLabel.title.rawValue:
+                refresh(target: &title, value: $0.value as? String)
+            case ItemLabel.dateline.rawValue:
+                refresh(target: &time, value: $0.value as? String)
+            case ItemLabel.count.rawValue:
+                refresh(target: &count, value: $0.value as? Int)
+            case ItemLabel.images.rawValue:
+                //refresh(&images, value: $0.value)
+                if let temp = $0.value as? [String] {
+                    images.append(contentsOf: temp)
+                }
+            default:
+                break
             }
-        })
+        }
         //logodata = default_logo
         return
     }
@@ -93,7 +101,7 @@ class WxcListItem : WxcItems {
     func updateLogo() {
         if imgdata == nil {
             log("img for \(self.postId), url=" + (self.images.isEmpty ? "nil" : "\(self.images[0])"))
-            self.imgdata = self.images.isEmpty ? default_logo :NSData(contentsOfURL: NSURL(string: self.images[0])!)
+            self.imgdata = self.images.isEmpty ? default_logo : NSData(contentsOf: URL(string: self.images[0])!)
             /*
             let before = UIImage(data: imgdata!)
             let after = reSizeImage(before!, toSize: CGSize(width: 150,height: 150))
@@ -103,7 +111,7 @@ class WxcListItem : WxcItems {
         }
     }
     
-    var logodata : NSData?{
+    var logodata: NSData? {
         get {
             return imgdata == nil ? default_logo : imgdata
             /*
@@ -117,13 +125,13 @@ class WxcListItem : WxcItems {
         }
     }
     
-    func reSizeImage(image: UIImage, var toSize reSize: CGSize) -> UIImage {
-        let temp:Float = Float(image.size.width) / Float(reSize.width)
+    func reSizeImage(image: UIImage, toSize reSize: CGSize) -> UIImage {
+        let temp: Float = Float(image.size.width) / Float(reSize.width)
         reSize.height = CGFloat(Float(image.size.height) / temp)
         //print(reSize)
-        UIGraphicsBeginImageContext(CGSizeMake(reSize.width, reSize.height))
-        image.drawInRect(CGRectMake(0, 0, reSize.width, reSize.height))
-        let reSizeImage: UIImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsBeginImageContext(reSize)
+        image.draw(in: CGRect(x: 0, y: 0, width: reSize.width, height: reSize.height))
+        let reSizeImage: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
         return reSizeImage
     }
@@ -131,76 +139,94 @@ class WxcListItem : WxcItems {
 }
 
 /// Post Comment Item
-class WxcPostComment  : WxcItems{
-    var usrface : String = ""
-    var usr : String     = "NO-NAME"
-    var content : String = ""
+class WxcPostComment: WxcItems {
+    var usrface: String = ""
+    var usr: String = "NO-NAME"
+    var content: String = ""
     
-    override init? (fromdict dict: [ String: AnyObject ]?){
+    override init? (fromdict dict: [String: Any]?) {
         super.init(fromdict: dict)
         
-        if !checkDataAviliable(fromdict: dict!, musthave: .postid,  .dateline, .usr) {
+        if !checkDataAvailable(fromdict: dict ?? [:], musthave: .postid, .dateline, .usr) {
             //printf("No data needed")
             return nil
         }
         
-        dict!.forEach({
-            switch $0.0 {
-            case ItemLable.postid.rawValue :    refresh(&postId, value: $0.1.integerValue)
-            case ItemLable.content.rawValue :   refresh(&content, value: $0.1)
-            case ItemLable.dateline.rawValue :  refresh(&time, value: $0.1)
-            case ItemLable.usr.rawValue :           refresh(&usr, value: $0.1)
-            case ItemLable.usrface.rawValue :   refresh(&usrface, value: $0.1)
-            default: break
+        dict?.forEach {
+            switch $0.key {
+            case ItemLabel.postid.rawValue:
+                refresh(target: &postId, value: $0.value as? Int)
+            case ItemLabel.content.rawValue:
+                refresh(target: &content, value: $0.value as? String)
+            case ItemLabel.dateline.rawValue:
+                refresh(target: &time, value: $0.value as? String)
+            case ItemLabel.usr.rawValue:
+                refresh(target: &usr, value: $0.value as? String)
+            case ItemLabel.usrface.rawValue:
+                refresh(target: &usrface, value: $0.value as? String)
+            default:
+                break
             }
-        })
+        }
         return
     }
 }
 
 // Post Item, info about every post
-class WxcPostItem : WxcItems {
-    var content : String       = ""
-    var url : String           = ""
-    var subid : String         = "news"
-    var author : String        = "UNKNOWN"
-    var basecode : Int         = 0
-    var previous : Int         = 0
-    var next : Int             = 0
-    var count : Int            = 0
-    var images : Array<String> = []
-    var comment : Array<WxcPostComment> = []
+class WxcPostItem: WxcItems {
+    var content: String = ""
+    var url: String = ""
+    var subid: String = "news"
+    var author: String = "UNKNOWN"
+    var basecode: Int = 0
+    var previous: Int = 0
+    var next: Int = 0
+    var count: Int = 0
+    var images: [String] = []
+    var comment: [WxcPostComment] = []
     
-    override init? (fromdict dict: [ String: AnyObject ]?){
+    override init? (fromdict dict: [String: Any]?) {
         super.init(fromdict: dict)
         
-        if !checkDataAviliable(fromdict: dict!, musthave: .postid,  .datetime, .title, .content) {
+        if !checkDataAvailable(fromdict: dict ?? [:], musthave: .postid, .datetime, .title, .content) {
             return nil
         }
         
-        dict!.forEach({
-            switch $0.0 {
-            case ItemLable.postid.rawValue :        refresh(&postId, value: $0.1.integerValue)
-            case ItemLable.title.rawValue :             refresh(&title, value: $0.1)
-            case ItemLable.content.rawValue :       refresh(&content, value: $0.1)
-            case ItemLable.datetime.rawValue :     refresh(&time, value: $0.1)
-            case ItemLable.images.rawValue :       refresh(&images, value: $0.1)
-            case ItemLable.subid.rawValue :          refresh(&subid, value: $0.1)
-            case ItemLable.author.rawValue :         refresh(&author, value: $0.1)
-            case ItemLable.basecode.rawValue :    refresh(&basecode, value: $0.1.integerValue)
-            case ItemLable.count.rawValue :         refresh(&count, value: $0.1.integerValue)
-            case ItemLable.url.rawValue :               refresh(&url, value: $0.1)
-            case ItemLable.comment.rawValue :
-                let temp = $0.1 as? Array<AnyObject>
-                temp?.forEach({
-                    let new = WxcPostComment(fromdict: ($0 as! ([ String: String]) ))
-                    if new != nil {
-                        comment.append(new!)
+        dict?.forEach {
+            switch $0.key {
+            case ItemLabel.postid.rawValue:
+                refresh(target: &postId, value: $0.value as? Int)
+            case ItemLabel.title.rawValue:
+                refresh(target: &title, value: $0.value as? String)
+            case ItemLabel.content.rawValue:
+                refresh(target: &content, value: $0.value as? String)
+            case ItemLabel.datetime.rawValue:
+                refresh(target: &time, value: $0.value as? String)
+            case ItemLabel.images.rawValue:
+                refresh(target: &images, value: $0.value as? [String])
+            case ItemLabel.subid.rawValue:
+                refresh(target: &subid, value: $0.value as? String)
+            case ItemLabel.author.rawValue:
+                refresh(target: &author, value: $0.value as? String)
+            case ItemLabel.basecode.rawValue:
+                refresh(target: &basecode, value: $0.value as? Int)
+            case ItemLabel.count.rawValue:
+                refresh(target: &count, value: $0.value as? Int)
+            case ItemLabel.url.rawValue:
+                refresh(target: &url, value: $0.value as? String)
+            case ItemLabel.comment.rawValue:
+                if let temp = $0.value as? [[String: String]] {
+                    temp.forEach {
+                        let new = WxcPostComment(fromdict: $0)
+                        if new != nil {
+                            comment.append(new!)
+                        }
                     }
-                })
-            default: break
+                }
+            default:
+                break
             }
-        })
+        }
         return
     }
 }
@@ -210,7 +236,6 @@ func < (lhs: WxcItems, rhs: WxcItems) -> Bool {
     return lhs.postId < rhs.postId
 }
 
-func == (lhs: WxcItems, rhs: WxcItems) -> Bool{
+func == (lhs: WxcItems, rhs: WxcItems) -> Bool {
     return lhs.postId == rhs.postId
 }
-

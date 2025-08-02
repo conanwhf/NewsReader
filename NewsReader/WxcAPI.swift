@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum WxcChannels : Int {
+enum WxcChannels: Int {
     case news = 0
     case ent = 1
     case social = 2
@@ -17,11 +17,11 @@ enum WxcChannels : Int {
 }
 let wxcChannelArr = ["新闻", "娱乐", "社会"]
 
-struct WxcAPI  {
-    private let _APIURL_BASE      = "http://api.wenxuecity.com/service/api/?"
-    private let _CALLBACK_ID      = "CONANTEST"
-    private let _FORMAT_             =  "json"
-    private let _CHANNELS           = ["&channel=news", "&channel=ent", "&channel=gossip", "&func=blog", "&func=bbs"]
+struct WxcAPI {
+    private let _APIURL_BASE = "http://api.wenxuecity.com/service/api/?"
+    private let _CALLBACK_ID = "CONANTEST"
+    private let _FORMAT_ = "json"
+    private let _CHANNELS = ["&channel=news", "&channel=ent", "&channel=gossip", "&func=blog", "&func=bbs"]
     var pagesize = 30
     /*  - act: {
             view. ( - id)
@@ -39,38 +39,38 @@ struct WxcAPI  {
      - parameter last: 最后post ID，为0的时候为请求最新数据
      - parameter num:  返回的item数量
      */
-    func getURL( requestChannel ch : WxcChannels, last: Int = 0 ) -> NSURL {
+    func getURL(requestChannel ch: WxcChannels, last: Int = 0) -> URL {
         //act=list, channel, format, lastid, pagesize
-        var st = _APIURL_BASE + "&act=list&version=2" + ("&format=" + _FORMAT_ )
+        var st = _APIURL_BASE + "&act=list&version=2" + ("&format=" + _FORMAT_)
         st = st + _CHANNELS[ch.rawValue] + "&lastID=\(last)" + "&pagesize=\(pagesize)"
-        return NSURL(string: st)!
+        return URL(string: st)!
     }
     
     /**请求单篇文章数据）
      - parameter id: 请求的PostID
      - parameter ver: 返回数据使用版本，默认为2
      */
-    func getURL(postId id: Int, requestChannel ch : WxcChannels, ver : Int = 2 ) -> NSURL {
+    func getURL(postId id: Int, requestChannel ch: WxcChannels, ver: Int = 2) -> URL {
         //act=view, format, version
-        var st = _APIURL_BASE + "&act=view" + ("&format=" + _FORMAT_ )
+        var st = _APIURL_BASE + "&act=view" + ("&format=" + _FORMAT_)
         st = st + "&version=\(ver)" + "&id=\(id)" + _CHANNELS[ch.rawValue]
-        return NSURL(string: st)!
+        return URL(string: st)!
     }
 
-    //如果需要针对网站预先处理
-    private func operation(inout st: String) {
-        //TODO: do sth. about string
+    // 如果需要针对网站预先处理
+    private func operation(_ st: inout String) {
+        // TODO: do sth. about string
     }
 
-    func speicalForData(data : NSData) -> NSData? {
-        var st = String(data: data, encoding: NSUTF8StringEncoding)!
+    func specialForData(data: Data) -> Data? {
+        var st = String(data: data, encoding: .utf8)!
         self.operation(&st)
-        return st.dataUsingEncoding(NSUTF8StringEncoding)
+        return st.data(using: .utf8)
     }
     
-    func speicalForData(var st : String) -> NSData? {
-        self.operation(&st)
-        return st.dataUsingEncoding(NSUTF8StringEncoding)
+    func specialForData(_ st: String) -> Data? {
+        var mutableSt = st
+        self.operation(&mutableSt)
+        return mutableSt.data(using: .utf8)
     }
 }
-

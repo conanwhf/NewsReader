@@ -8,27 +8,28 @@
 
 import Foundation
 
-var manager : NewsDataManager = NewsDataManager()
+let manager = NewsDataManager()
 
 
-func log <T> (message: T , _ marker: AnyObject? = nil )  {
+func log<T>(_ message: T, _ marker: Any? = nil) {
     #if DEBUG
         //print(" \(__FUNCTION__) in \(__FILE__): \(message), from \(self)")
-        NSLog("\(message), mark: \(marker)")
+        NSLog("\(message), mark: \(marker ?? "nil")")
     #else
         //print("\(message), mark: \(marker)")
     #endif
 }
-func logn (n :Int )  {
+
+func logn(_ n: Int) {
     #if DEBUG
-        NSlog("\(n)\(n)\(n)\(n)\(n)\(n)\(n)\(n)\(n)\(n)\(n)\(n)\(n)\(n)")
+        NSLog(String(repeating: "\(n)", count: 14))
     #else
         //print("\(n)\(n)\(n)\(n)\(n)\(n)\(n)\(n)\(n)\(n)\(n)\(n)\(n)\(n)")
     #endif
 }
 
 
-enum NewsType :Int {
+enum NewsType: Int {
     case wenxuecity = 3
     case qiushi
     case channel8
@@ -36,29 +37,32 @@ enum NewsType :Int {
     case lifeinterst
 }
 
-enum DataRequestMode{
+enum DataRequestMode {
     case moreItems
     case latestItems
     case post
 }
 
-class NewsDataManager {    
-    private var url :NSURL
-    private var wxc = ( api : WxcAPI, list:  Array<Array<WxcListItem>>,  post: WxcPostItem?,  channel: WxcChannels) (WxcAPI(), list: [[],[],[],[],[]], post: nil, .news)
+class NewsDataManager {
+    private var url: URL
+    private var wxc = (api: WxcAPI(), list: Array<Array<WxcListItem>>(repeating: [], count: 5), post: WxcPostItem?, channel: WxcChannels.news)
     
-    private init (){
-        url = NSURL(string:"")!
-        return
+    private init() {
+        url = URL(string: "")!
     }
 
     func updateData(news: NewsType, mode: DataRequestMode, id: Int = 0) {
         switch (news, mode) {
-        case (.wenxuecity, .latestItems) :            url = wxc.api.getURL(requestChannel: wxc.channel, last: id)
-        case (.wenxuecity, .moreItems) :            url = wxc.api.getURL(requestChannel: wxc.channel, last: wxc.list[wxc.channel.rawValue].last!.postId)
-        case (.wenxuecity, .post) :                      url = wxc.api.getURL(postId: id, requestChannel: wxc.channel)
-        default: break
+        case (.wenxuecity, .latestItems):
+            url = wxc.api.getURL(requestChannel: wxc.channel, last: id)
+        case (.wenxuecity, .moreItems):
+            url = wxc.api.getURL(requestChannel: wxc.channel, last: wxc.list[wxc.channel.rawValue].last?.postId ?? 0)
+        case (.wenxuecity, .post):
+            url = wxc.api.getURL(postId: id, requestChannel: wxc.channel)
+        default:
+            break
         }
-        fillData(news)
+        fillData(news: news)
         log(url, self)
     }
     
@@ -67,24 +71,25 @@ class NewsDataManager {
      填数据，通过拿到的URL，把list或post数据根据JSON解析出来，填到数据结构中
      - parameter news: 指定新闻网站
      */
-    private func fillData(news: NewsType)  {
-        guard let data = NSData(contentsOfURL: url) else {
-            log("No data",self)
+    private func fillData(news: NewsType) {
+        guard let data = try? Data(contentsOf: url) else {
+            log("No data", self)
             return
         }
         do {
-            let json = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers)
+            let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers)
             
-            let more : NSArray? = json["list"] as? NSArray
-            more?.forEach({
-                let temp = WxcListItem(fromdict: ($0 as! ([ String: AnyObject]) ))
-                if temp != nil {
-                    inserItemToList(temp!, arr: &wxc.list[wxc.channel.rawValue])
+            if let more = json["list"] as? [[String: Any]] {
+                for item in more {
+                    if let temp = WxcListItem(fromdict: item) {
+                        inserItemToList(target: temp, arr: &wxc.list[wxc.channel.rawValue])
+                    }
                 }
-            })
+            }
             
-            let newpost = json as? ([ String: AnyObject])
-            wxc.post = WxcPostItem(fromdict: newpost)
+            if let newpost = json as? [String: Any] {
+                wxc.post = WxcPostItem(fromdict: newpost)
+            }
             //log(wxc.post?.content)
         } catch {
             NSLog("JSONObjectWithData: \(error)")
@@ -96,59 +101,62 @@ class NewsDataManager {
      - parameter target: 待处理数据item
      - parameter arr:    目标List
      */
-    private func inserItemToList < T: Comparable > (target: T, inout arr:Array< T >) {
-        target
+    private func inserItemToList<T: Comparable>(target: T, arr: inout [T]) {
         if arr.isEmpty {
-            return arr.append(target)
-        }
-        if arr.contains(target){
+            arr.append(target)
             return
         }
-        if arr.first < target {
-            return arr.insert(target, atIndex: 0)
+        if arr.contains(target) {
+            return
         }
-        if arr.last > target {
-            return arr.append(target)
+        if let first = arr.first, first < target {
+            arr.insert(target, at: 0)
+            return
         }
-        for i in 0...arr.count-2 {
-            if (arr[i] > target) && (arr[i+1] < target) {
-                return arr.insert(target, atIndex: i+1)
+        if let last = arr.last, last > target {
+            arr.append(target)
+            return
+        }
+        for i in 0..<arr.count-1 {
+            if let current = arr[i], let next = arr[i+1] {
+                if current > target && next < target {
+                    arr.insert(target, at: i+1)
+                    return
+                }
             }
         }
     }
     
     /// 计算属性，用来获取属性，实现只读封装
-    var wxcList : Array<WxcListItem> {
+    var wxcList: [WxcListItem] {
         get {
             return wxc.list[wxc.channel.rawValue]
         }
     }
-    var wxcPost : WxcPostItem? {
+    var wxcPost: WxcPostItem? {
         get {
             return wxc.post
         }
     }
-    var wxcCh : WxcChannels {
+    var wxcCh: WxcChannels {
         get {
             return wxc.channel
         }
-        set (channel) {
+        set(channel) {
             wxc.channel = channel
         }
     }
-    var wxcGetItemNum : Int {
+    var wxcGetItemNum: Int {
         get {
             return wxc.api.pagesize
         }
-        set (size) {
+        set(size) {
             if size > 100 {
-                log("Too many data will be refused",self)
-            }
-            else {
+                log("Too many data will be refused", self)
+            } else {
                 wxc.api.pagesize = size
             }
         }
     }
     
 }
-
