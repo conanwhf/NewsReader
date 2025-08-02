@@ -214,6 +214,7 @@
 				27CB6B281C52766800D83B76 /* zh-Hans */,
 			);
 			name = Main.storyboard;
+			path = NewsReader;
 			sourceTree = "<group>";
 		};
 		27881B9F1C22668500C6F919 /* LaunchScreen.storyboard */ = {
@@ -223,6 +224,7 @@
 				27CB6B271C52766800D83B76 /* zh-Hans */,
 			);
 			name = LaunchScreen.storyboard;
+			path = NewsReader;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
