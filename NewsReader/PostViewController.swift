@@ -73,7 +73,7 @@ class PostViewController: UIViewController {
         let img_width = Int(postTextView.frame.width - 30)
         var config: String
         var st: String
-       
+        
         //log("postwidth = \(postTextView.frame.width), UIsize=\(UIScreen.main.bounds.size), scale=\(UIScreen.main.scale)", self)
         config = "img{max-width:\(img_width)px !important;}"   // img style
         config += "body {font-size:\(DEFAULT_FONT_SIZE)px; background-color:#F9F2FF;}"   // body style
@@ -108,7 +108,7 @@ class PostViewController: UIViewController {
     
     @IBAction func sharePost(_ sender: UIButton) {
         log("share url:\(data?.url ?? "nil")")
-             
+              
         guard let url = URL(string: data!.url) else {
             return
         }
