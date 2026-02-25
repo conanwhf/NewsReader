@@ -45,7 +45,11 @@ class ListTableViewCell: UITableViewCell {
         infoLabel.text = "🖊" + manager.wxcList[index].time + "    📖 \(manager.wxcList[index].count)"
         
         // Image config
-        imgImageView.image = UIImage(data: manager.wxcList[index].logodata!)
+        if let data = manager.wxcList[index].logodata as? Data {
+            imgImageView.image = UIImage(data: data)
+        } else {
+            imgImageView.image = nil
+        }
         imgImageView.contentMode = .scaleAspectFit
         imgImageView.layer.masksToBounds = true
         imgImageView.layer.cornerRadius = 8.0

@@ -9,10 +9,10 @@
 import UIKit
 // import iAd // iAd is deprecated, remove if not used
 
-private var last = (offset: CGPoint(x: 0, y: 0), ch: 0, news: NewsType.wenxuecity)
+@MainActor private var last = (offset: CGPoint(x: 0, y: 0), ch: 0, news: NewsType.wenxuecity)
 private let queue_getListInfo = DispatchQueue.global(qos: .userInitiated)
 private let queue_getListImg = DispatchQueue.global(qos: .background)
-private var read: Set<Int> = []
+@MainActor private var read: Set<Int> = []
 
 class ListViewController: UIViewController {
     @IBOutlet weak var channelSegmentedControl: UISegmentedControl!
@@ -38,7 +38,7 @@ class ListViewController: UIViewController {
             // 显示之前位置
             log("channel=\(last.ch), offset=\(last.offset)")
             listTableView.setContentOffset(last.offset, animated: false)
-            self.updateImg(-1)
+            self.updateImg(index: -1)
         }
         // 添加下拉刷新
         refreshControl.addTarget(self, action: #selector(updateLatestList), for: .valueChanged)
@@ -56,6 +56,10 @@ class ListViewController: UIViewController {
             object: nil
         )
 
+    }
+    
+    @objc func statusBarOrientationChange() {
+        self.reload()
     }
     
     override func didReceiveMemoryWarning() {
@@ -108,7 +112,7 @@ class ListViewController: UIViewController {
         read.insert(next.postid)
     }
     
-    private func reload() {
+    nonisolated private func reload() {
         DispatchQueue.main.async {
             self.listTableView.reloadData()
             self.loadingIndicator.stopAnimating()
@@ -137,10 +141,12 @@ class ListViewController: UIViewController {
     @objc func updateLatestList() {
         queue_getListInfo.async {
             log("add a new job to update list info", self)
-            manager.updateData(last.news, mode: DataRequestMode.latestItems)
+            manager.updateData(news: last.news, mode: DataRequestMode.latestItems)
             self.reload()
-            self.refreshControl.endRefreshing()
-            self.updateImg(-1)
+            DispatchQueue.main.async {
+                self.refreshControl.endRefreshing()
+            }
+            self.updateImg(index: -1)
         } // async end
     }
 
@@ -149,12 +155,14 @@ class ListViewController: UIViewController {
         if (scrollView.contentOffset.y > (scrollView.contentSize.height - scrollView.frame.size.height) + 70) && (manager.wxcList.count > 0) //70是触发操作的阀值
         {
             log(scrollView.contentOffset.y - (scrollView.contentSize.height - scrollView.frame.size.height), "44444444444") //触发上拉刷新
-            loadingIndicator.startAnimating()
+            DispatchQueue.main.async {
+                self.loadingIndicator.startAnimating()
+            }
             queue_getListInfo.async {
                 log("add a new job to get more", self)
-                manager.updateData(last.news, mode: DataRequestMode.moreItems)
+                manager.updateData(news: last.news, mode: DataRequestMode.moreItems)
                 self.reload()
-                self.updateImg(-1)
+                self.updateImg(index: -1)
             }
         }
         /*

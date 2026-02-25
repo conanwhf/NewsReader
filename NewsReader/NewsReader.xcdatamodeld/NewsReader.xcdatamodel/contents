@@ -1,101 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>model</key>
-	<dict>
-		<key>name</key>
-		<string>NewsReader.xcdatamodel</string>
-		<key>userDefinedModelVersionIdentifier</key>
-		<string></string>
-		<key>type</key>
-		<string>com.apple.IDECoreDataModeler.DataModel</string>
-		<key>documentVersion</key>
-		<string>1.0</string>
-		<key>lastSavedToolsVersion</key>
-		<string>1</string>
-		<key>systemVersion</key>
-		<string>11A491</string>
-		<key>minimumToolsVersion</key>
-		<string>Automatic</string>
-		<key>macOSVersion</key>
-		<string>Automatic</string>
-		<key>iOSVersion</key>
-		<string>18.0</string>
-		<key>elements</key>
-		<dict>
-			<key>entity</key>
-			<dict>
-				<key>name</key>
-				<string>NewsItem</string>
-				<key>configuration</key>
-				<string></string>
-				<key>abstract</key>
-				<string>NO</string>
-				<key>parentEntity</key>
-				<string></string>
-				<key>usesSwiftValueTypes</key>
-				<string>YES</string>
-				<key>attributes</key>
-				<array>
-					<dict>
-						<key>name</key>
-						<string>title</string>
-						<key>attributeType</key>
-						<string>String</string>
-						<key>optional</key>
-						<string>NO</string>
-						<key>transient</key>
-						<string>NO</string>
-						<key>indexed</key>
-						<string>NO</string>
-						<key>defaultValue</key>
-						<string></string>
-					</dict>
-					<dict>
-						<key>name</key>
-						<string>content</string>
-						<key>attributeType</key>
-						<string>String</string>
-						<key>optional</key>
-						<string>YES</string>
-						<key>transient</key>
-						<string>NO</string>
-						<key>indexed</key>
-						<string>NO</string>
-						<key>defaultValue</key>
-						<string></string>
-					</dict>
-					<dict>
-						<key>name</key>
-						<string>postId</string>
-						<key>attributeType</key>
-						<string>Integer 32</string>
-						<key>optional</key>
-						<string>NO</string>
-						<key>transient</key>
-						<string>NO</string>
-						<key>indexed</key>
-						<string>NO</string>
-						<key>defaultValue</key>
-						<string>0</string>
-					</dict>
-					<dict>
-						<key>name</key>
-						<string>publishDate</string>
-						<key>attributeType</key>
-						<string>Date</string>
-						<key>optional</key>
-						<string>YES</string>
-						<key>transient</key>
-						<string>NO</string>
-						<key>indexed</key>
-						<string>NO</string>
-						<key>defaultValue</key>
-						<string></string>
-					</dict>
-				</array>
-			</dict>
-		</dict>
-	</dict>
-</plist>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model name="NewsReader.xcdatamodel" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1" systemVersion="11A491" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="18.0">
+    <entity name="NewsItem" representedClassName="NewsItem" syncable="YES" codeGenerationType="class">
+        <attribute name="content" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="postId" optional="NO" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="publishDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="title" optional="NO" attributeType="String" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="NewsItem" positionX="-63" positionY="-18" width="128" height="105"/>
+    </elements>
+</model>

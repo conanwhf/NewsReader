@@ -9,7 +9,6 @@
 import Foundation
 import UIKit
 
-private let default_logo = NSData(contentsOf: URL(string: "http://www.wenxuecity.com/images/wxc-logo.gif")!)
 
 /**
  *  List Item, info for each item in list
@@ -19,7 +18,7 @@ class WxcItems: Comparable {
     var title: String = ""
     var time: String = ""
     
-    private enum ItemLabel: String {
+    fileprivate enum ItemLabel: String {
         case postid = "postid"
         case subid = "subid"
         case title = "title"
@@ -45,14 +44,14 @@ class WxcItems: Comparable {
         }
     }
     
-    private func checkDataAvailable(fromdict dict: [String: Any], musthave must: ItemLabel...) -> Bool {
+    fileprivate func checkDataAvailable(fromdict dict: [String: Any], musthave must: ItemLabel...) -> Bool {
         let hasKeys = dict.keys
         var ret = true
         must.forEach { ret = ret && hasKeys.contains($0.rawValue) }
         return ret
     }
     
-    private func refresh<T1, T2>(target: inout T1, value: T2?) {
+    fileprivate func refresh<T1, T2>(target: inout T1, value: T2?) {
         if let test = value as? T1 {
             target = test
         }
@@ -101,7 +100,7 @@ class WxcListItem: WxcItems {
     func updateLogo() {
         if imgdata == nil {
             log("img for \(self.postId), url=" + (self.images.isEmpty ? "nil" : "\(self.images[0])"))
-            self.imgdata = self.images.isEmpty ? default_logo : NSData(contentsOf: URL(string: self.images[0])!)
+            self.imgdata = self.images.isEmpty ? nil : NSData(contentsOf: URL(string: self.images[0])!)
             /*
             let before = UIImage(data: imgdata!)
             let after = reSizeImage(before!, toSize: CGSize(width: 150,height: 150))
@@ -113,7 +112,7 @@ class WxcListItem: WxcItems {
     
     var logodata: NSData? {
         get {
-            return imgdata == nil ? default_logo : imgdata
+            return imgdata
             /*
             if imgdata == nil {
                 return (default_logo, true)
@@ -126,11 +125,12 @@ class WxcListItem: WxcItems {
     }
     
     func reSizeImage(image: UIImage, toSize reSize: CGSize) -> UIImage {
-        let temp: Float = Float(image.size.width) / Float(reSize.width)
-        reSize.height = CGFloat(Float(image.size.height) / temp)
-        //print(reSize)
-        UIGraphicsBeginImageContext(reSize)
-        image.draw(in: CGRect(x: 0, y: 0, width: reSize.width, height: reSize.height))
+        var newSize = reSize
+        let temp: Float = Float(image.size.width) / Float(newSize.width)
+        newSize.height = CGFloat(Float(image.size.height) / temp)
+        //print(newSize)
+        UIGraphicsBeginImageContext(newSize)
+        image.draw(in: CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height))
         let reSizeImage: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
         return reSizeImage

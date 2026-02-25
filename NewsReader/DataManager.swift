@@ -8,7 +8,7 @@
 
 import Foundation
 
-let manager = NewsDataManager()
+nonisolated(unsafe) let manager = NewsDataManager()
 
 
 func log<T>(_ message: T, _ marker: Any? = nil) {
@@ -45,10 +45,10 @@ enum DataRequestMode {
 
 class NewsDataManager {
     private var url: URL
-    private var wxc = (api: WxcAPI(), list: Array<Array<WxcListItem>>(repeating: [], count: 5), post: WxcPostItem?, channel: WxcChannels.news)
+    private var wxc: (api: WxcAPI, list: [[WxcListItem]], post: WxcPostItem?, channel: WxcChannels) = (api: WxcAPI(), list: Array<Array<WxcListItem>>(repeating: [], count: 5), post: nil, channel: WxcChannels.news)
     
-    private init() {
-        url = URL(string: "")!
+    fileprivate init() {
+        url = URL(string: "http://api.wenxuecity.com")!
     }
 
     func updateData(news: NewsType, mode: DataRequestMode, id: Int = 0) {
@@ -79,7 +79,7 @@ class NewsDataManager {
         do {
             let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers)
             
-            if let more = json["list"] as? [[String: Any]] {
+            if let dict = json as? [String: Any], let more = dict["list"] as? [[String: Any]] {
                 for item in more {
                     if let temp = WxcListItem(fromdict: item) {
                         inserItemToList(target: temp, arr: &wxc.list[wxc.channel.rawValue])
@@ -118,11 +118,11 @@ class NewsDataManager {
             return
         }
         for i in 0..<arr.count-1 {
-            if let current = arr[i], let next = arr[i+1] {
-                if current > target && next < target {
+            let current = arr[i]
+            let next = arr[i+1]
+            if current > target && next < target {
                     arr.insert(target, at: i+1)
                     return
-                }
             }
         }
     }

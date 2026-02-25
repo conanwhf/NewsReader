@@ -9,7 +9,7 @@
 import UIKit
 // import iAd // iAd is deprecated, remove if not used
 
-private var DEFAULT_FONT_SIZE = 16
+private let DEFAULT_FONT_SIZE = 16
 
 class PostViewController: UIViewController {
     
@@ -32,7 +32,7 @@ class PostViewController: UIViewController {
         
         if self.data == nil { // first time
             queue_getPost.async {
-                manager.updateData(.wenxuecity, mode: .post, id: self.postid)
+                manager.updateData(news: .wenxuecity, mode: .post, id: self.postid)
                 self.data = manager.wxcPost
                 guard let postData = self.data else {
                     log("No post data", self)
@@ -68,7 +68,7 @@ class PostViewController: UIViewController {
     }
     
     private func createPostText() -> NSAttributedString {
-        let htmlopt = [NSAttributedString.DocumentAttributeKey.documentType: NSAttributedString.DocumentType.html]
+        let htmlopt = [NSAttributedString.DocumentReadingOptionKey.documentType: NSAttributedString.DocumentType.html]
         //let img_width = Int(UIScreen.main.bounds.width-30)
         let img_width = Int(postTextView.frame.width - 30)
         var config: String
