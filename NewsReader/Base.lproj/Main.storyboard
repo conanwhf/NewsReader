@@ -89,9 +89,9 @@
                     <toolbarItems/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
-                        <outlet property="ListTableView" destination="En1-Gs-s04" id="Uoy-eK-cYI"/>
-                        <outlet property="channel" destination="Net-m3-PdX" id="y5A-zc-78j"/>
-                        <outlet property="loading" destination="BDI-9B-wpA" id="pK3-tr-Bxw"/>
+                        <outlet property="listTableView" destination="En1-Gs-s04" id="Uoy-eK-cYI"/>
+                        <outlet property="channelSegmentedControl" destination="Net-m3-PdX" id="y5A-zc-78j"/>
+                        <outlet property="loadingIndicator" destination="BDI-9B-wpA" id="pK3-tr-Bxw"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -201,11 +201,11 @@
                         </variation>
                     </view>
                     <connections>
-                        <outlet property="barNav" destination="yC6-yM-3ov" id="4bQ-bx-obk"/>
-                        <outlet property="btnBack" destination="AFG-Ln-g9y" id="Nti-LL-wmR"/>
-                        <outlet property="btnShare" destination="nuj-pL-EwT" id="ocg-z6-HI1"/>
-                        <outlet property="infoReturn" destination="d0O-C1-mdH" id="UYQ-g5-cCH"/>
-                        <outlet property="post" destination="Xi4-9H-yr2" id="LXT-Rp-CZG"/>
+                        <outlet property="navigationBar" destination="yC6-yM-3ov" id="4bQ-bx-obk"/>
+                        <outlet property="backButton" destination="AFG-Ln-g9y" id="Nti-LL-wmR"/>
+                        <outlet property="shareButton" destination="nuj-pL-EwT" id="ocg-z6-HI1"/>
+                        <outlet property="returnLabel" destination="d0O-C1-mdH" id="UYQ-g5-cCH"/>
+                        <outlet property="postTextView" destination="Xi4-9H-yr2" id="LXT-Rp-CZG"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gM8-4D-S8v" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -14,7 +14,7 @@ private let queue_getListInfo = DispatchQueue.global(qos: .userInitiated)
 private let queue_getListImg = DispatchQueue.global(qos: .background)
 @MainActor private var read: Set<Int> = []
 
-class ListViewController: UIViewController {
+class ListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     @IBOutlet weak var channelSegmentedControl: UISegmentedControl!
     @IBOutlet weak var listTableView: UITableView!
     @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
@@ -84,12 +84,12 @@ class ListViewController: UIViewController {
             return UITableViewCell()
         }
 
-        listCell.showListItemInfo(index: indexPath.row)
+        listCell.showListItemInfo(indexPath.row)
         if read.contains(manager.wxcList[indexPath.row].postId) {
             log("read!@    post=\(manager.wxcList[indexPath.row]), set=\(read)")
-            listCell.titleLabel.textColor = .gray
+            listCell.title.textColor = .gray
         } else {
-            listCell.titleLabel.textColor = .black
+            listCell.title.textColor = .black
         }
         return listCell
     }
